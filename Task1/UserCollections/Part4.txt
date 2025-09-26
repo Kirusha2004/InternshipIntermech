@@ -1,0 +1,43 @@
+Тема 1: Коллекции (общее понятие)
+
+http://msdn.microsoft.com/ru-ru/library/akyhke97.aspx (Определение коллекций)
+
+https://docs.microsoft.com/ru-ru/dotnet/csharp/programming-guide/concepts/collections (Более общая страница по коллекциям)
+
+Тема 2: Интерфейсы IEnumerable, IEnumerator, IEnumerable<T>, IEnumerator<T>
+
+http://msdn.microsoft.com/ru-ru/library/dscyy5s0.aspx (Итераторы)
+
+https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.ienumerable?view=net-6.0 (Необобщенные версии)
+
+https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.generic.ienumerable-1?view=net-6.0 (Обобщенные версии)
+
+Тема 3: Работа цикла foreach
+
+http://msdn.microsoft.com/ru-ru/library/hwyysy67.aspx (Перечисление коллекции)
+
+https://docs.microsoft.com/ru-ru/dotnet/csharp/language-reference/statements/iteration-statements#the-foreach-statement (Справочник по C#)
+
+Тема 4: Оператор yield
+
+http://msdn.microsoft.com/ru-ru/library/9k7k7cf0.aspx (Ключевое слово yield)
+
+https://docs.microsoft.com/ru-ru/dotnet/csharp/language-reference/statements/yield (Руководство)
+
+Тема 5: Интерфейсы ICollection и ICollection<T>
+
+https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.icollection?view=net-6.0 (ICollection)
+
+https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.generic.icollection-1?view=net-6.0 (ICollection<T>)
+
+Тема 6: Создание простой коллекции с помощью реализации интерфейса IList
+
+https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.ilist?view=net-6.0 (IList интерфейс)
+
+https://docs.microsoft.com/ru-ru/dotnet/api/system.collections.generic.ilist-1?view=net-6.0 (IList<T> интерфейс)
+
+https://docs.microsoft.com/ru-ru/dotnet/standard/collections/how-to-create-a-collection (Пример создания пользовательской коллекции)
+
+Тема 7: Рассмотрение коллекции созданной с использованием паттерна Iterator
+
+http://msdn.microsoft.com/ru-ru/library/dscyy5s0.aspx (Итераторы - охватывает паттерн)
