@@ -8,7 +8,7 @@ namespace UserCollections.Tests
     [TestClass]
     public class Task1Tests
     {
-        private List<Month> CreateTestMonths()
+        private static List<Month> CreateTestMonths()
         {
             return new List<Month> {
                 new Month(1, "Январь", 31),
@@ -27,7 +27,7 @@ namespace UserCollections.Tests
         }
 
         [TestMethod]
-        public void MonthByNumber_ReturnsCorrectMonth()
+        public void MonthByNumberReturnsCorrectMonth()
         {
             var list = CreateTestMonths();
             var result = list.Where(m => m.Number == 5).ToList();
@@ -38,7 +38,7 @@ namespace UserCollections.Tests
         }
 
         [TestMethod]
-        public void MonthsWith31Days_Returns7Months()
+        public void MonthsWith31DaysReturns7Months()
         {
             var list = CreateTestMonths();
             var result = list.Where(m => m.Days == 31).ToList();
@@ -48,7 +48,7 @@ namespace UserCollections.Tests
         }
 
         [TestMethod]
-        public void MonthsAfterJuneWith30Days_Returns2Months()
+        public void MonthsAfterJuneWith30DaysReturns2Months()
         {
             var list = CreateTestMonths();
             var result = list.Where(m => m.Number > 6 && m.Days == 30).ToList();
@@ -58,7 +58,7 @@ namespace UserCollections.Tests
         }
 
         [TestMethod]
-        public void MonthClass_CreatesCorrectly()
+        public void MonthClassCreatesCorrectly()
         {
             var month = new Month(5, "Май", 31);
 
