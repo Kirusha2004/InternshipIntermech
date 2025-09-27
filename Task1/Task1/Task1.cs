@@ -8,7 +8,8 @@ namespace UserCollections1
     {
         static void Main(string[] args)
         {
-            List<Month> list = new List<Month> {
+            List<Month> list = new List<Month>
+            {
                 new Month(1, "Январь", 31),
                 new Month(2, "Февраль", 28),
                 new Month(3, "Март", 31),
@@ -20,7 +21,7 @@ namespace UserCollections1
                 new Month(9, "Сентябрь", 30),
                 new Month(10, "Октябрь", 31),
                 new Month(11, "Ноябрь", 30),
-                new Month(12, "Декабрь", 31)
+                new Month(12, "Декабрь", 31),
             };
 
             var monthByNumber = list.Where(m => m.Number == 5);
@@ -47,5 +48,4 @@ namespace UserCollections1
             }
         }
     }
-
 }
