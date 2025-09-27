@@ -1,28 +1,28 @@
-Ôªøusing Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using UserCollections.PaRT2;
+using UserCollections1;
 
 namespace UserCollections.Tests
 {
     [TestClass]
-    public class MonthTests
+    public class Task1Tests
     {
         private List<Month> CreateTestMonths()
         {
             return new List<Month> {
-                new Month(1, "–Ø–Ω–≤–∞—Ä—å", 31),
-                new Month(2, "–§–µ–≤—Ä–∞–ª—å", 28),
-                new Month(3, "–ú–∞—Ä—Ç", 31),
-                new Month(4, "–ê–ø—Ä–µ–ª—å", 30),
-                new Month(5, "–ú–∞–π", 31),
-                new Month(6, "–ò—é–Ω—å", 30),
-                new Month(7, "–ò—é–ª—å", 31),
-                new Month(8, "–ê–≤–≥—É—Å—Ç", 31),
-                new Month(9, "–°–µ–Ω—Ç—è–±—Ä—å", 30),
-                new Month(10, "–û–∫—Ç—è–±—Ä—å", 31),
-                new Month(11, "–ù–æ—è–±—Ä—å", 30),
-                new Month(12, "–î–µ–∫–∞–±—Ä—å", 31)
+                new Month(1, "ﬂÌ‚‡¸", 31),
+                new Month(2, "‘Â‚‡Î¸", 28),
+                new Month(3, "Ã‡Ú", 31),
+                new Month(4, "¿ÔÂÎ¸", 30),
+                new Month(5, "Ã‡È", 31),
+                new Month(6, "»˛Ì¸", 30),
+                new Month(7, "»˛Î¸", 31),
+                new Month(8, "¿‚„ÛÒÚ", 31),
+                new Month(9, "—ÂÌÚˇ·¸", 30),
+                new Month(10, "ŒÍÚˇ·¸", 31),
+                new Month(11, "ÕÓˇ·¸", 30),
+                new Month(12, "ƒÂÍ‡·¸", 31)
             };
         }
 
@@ -33,7 +33,7 @@ namespace UserCollections.Tests
             var result = list.Where(m => m.Number == 5).ToList();
 
             Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("–ú–∞–π", result[0].Name);
+            Assert.AreEqual("Ã‡È", result[0].Name);
             Assert.AreEqual(31, result[0].Days);
         }
 
@@ -60,10 +60,10 @@ namespace UserCollections.Tests
         [TestMethod]
         public void MonthClass_CreatesCorrectly()
         {
-            var month = new Month(5, "–ú–∞–π", 31);
+            var month = new Month(5, "Ã‡È", 31);
 
             Assert.AreEqual(5, month.Number);
-            Assert.AreEqual("–ú–∞–π", month.Name);
+            Assert.AreEqual("Ã‡È", month.Name);
             Assert.AreEqual(31, month.Days);
         }
     }
