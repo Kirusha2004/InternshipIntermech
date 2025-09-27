@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UserCollections1;
 
-namespace UserCollections.Tests
+namespace UserCollections.Tests1
 {
     [TestClass]
     public class Task1Tests
