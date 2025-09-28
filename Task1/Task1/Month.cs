@@ -1,18 +1,17 @@
-﻿using System;
+namespace UserCollections1;
 
-namespace UserCollections1
+public class Month
 {
-    public class Month
+    public Month(int number, string name, int days)
     {
-        public int Number { get; set; }
-        public string Name { get; set; }
-        public int Days { get; set; }
-
-        public Month(int number, string name, int days)
-        {
-            Number = number;
-            Name = name;
-            Days = days;
-        }
+        Number = number;
+        Name = name;
+        Days = days;
     }
+
+    public int Number { get; set; }
+
+    public string Name { get; set; }
+
+    public int Days { get; set; }
 }
