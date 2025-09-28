@@ -35,7 +35,7 @@ public class Task1Tests
     public void MonthsAfterJuneWith30DaysReturns2Months()
     {
         MonthsInYear months = CreateTestMonths();
-        List<Month> result = months.Where(m => m.Number > 6 && m.Days == 30).ToList();
+        List<Month> result = [.. months.Where(m => m.Number > 6 && m.Days == 30)];
 
         Assert.AreEqual(2, result.Count);
         Assert.IsTrue(result.All(m => m.Number > 6 && m.Days == 30));
@@ -63,7 +63,6 @@ public class Task1Tests
     [TestMethod]
     public void MonthsInYearCurrentYearConstructorWorks()
     {
-        int currentYear = DateTime.Now.Year;
         MonthsInYear months = new MonthsInYear();
 
         Assert.AreEqual(12, months.Count());
@@ -121,10 +120,10 @@ public class Task1Tests
             "Сентябрь",
             "Октябрь",
             "Ноябрь",
-            "Декабрь",
+            "Декабрь"
         ];
 
-        string[] actualNames = months.Select(m => m.Name).ToArray();
+        string[] actualNames = [.. months.Select(m => m.Name)];
 
         CollectionAssert.AreEqual(expectedNames, actualNames);
     }
