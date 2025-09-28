@@ -5,15 +5,10 @@ namespace UserCollections.Tests1;
 [TestClass]
 public class Task1Tests
 {
-    private static MonthsInYear CreateTestMonths()
-    {
-        return new MonthsInYear(2023);
-    }
-
     [TestMethod]
     public void MonthByNumberReturnsCorrectMonth()
     {
-        MonthsInYear months = CreateTestMonths();
+        MonthsInYear months = TestDataFactory.CreateMonthsInYear();
         Month result = months.Single(m => m.Number == 5);
 
         Assert.AreEqual(5, result.Number);
@@ -24,8 +19,7 @@ public class Task1Tests
     [TestMethod]
     public void MonthsWith31DaysReturns7Months()
     {
-        MonthsInYear months = CreateTestMonths();
-        List<Month> result = [.. months.Where(m => m.Days == 31)];
+        List<Month> result = TestDataFactory.GetMonthsWith31Days();
 
         Assert.AreEqual(7, result.Count);
         Assert.IsTrue(result.All(m => m.Days == 31));
@@ -34,8 +28,7 @@ public class Task1Tests
     [TestMethod]
     public void MonthsAfterJuneWith30DaysReturns2Months()
     {
-        MonthsInYear months = CreateTestMonths();
-        List<Month> result = [.. months.Where(m => m.Number > 6 && m.Days == 30)];
+        List<Month> result = TestDataFactory.GetMonthsAfterJuneWith30Days();
 
         Assert.AreEqual(2, result.Count);
         Assert.IsTrue(result.All(m => m.Number > 6 && m.Days == 30));
@@ -54,7 +47,7 @@ public class Task1Tests
     [TestMethod]
     public void MonthsInYearContains12Months()
     {
-        MonthsInYear months = new MonthsInYear(2023);
+        MonthsInYear months = TestDataFactory.CreateMonthsInYear();
         int count = months.Count();
 
         Assert.AreEqual(12, count);
@@ -72,7 +65,7 @@ public class Task1Tests
     [TestMethod]
     public void FebruaryHasCorrectDaysInLeapYear()
     {
-        MonthsInYear leapYearMonths = new MonthsInYear(2020);
+        MonthsInYear leapYearMonths = TestDataFactory.CreateMonthsInYear(2020);
         Month february = leapYearMonths.Single(m => m.Number == 2);
 
         Assert.AreEqual(29, february.Days);
@@ -81,7 +74,7 @@ public class Task1Tests
     [TestMethod]
     public void FebruaryHasCorrectDaysInNonLeapYear()
     {
-        MonthsInYear nonLeapYearMonths = new MonthsInYear(2023);
+        MonthsInYear nonLeapYearMonths = TestDataFactory.CreateMonthsInYear();
         Month february = nonLeapYearMonths.Single(m => m.Number == 2);
 
         Assert.AreEqual(28, february.Days);
@@ -90,7 +83,7 @@ public class Task1Tests
     [TestMethod]
     public void MonthsInYearImplementsIEnumerableCorrectly()
     {
-        MonthsInYear months = new MonthsInYear(2023);
+        MonthsInYear months = TestDataFactory.CreateMonthsInYear();
         IEnumerator<Month> enumerator = months.GetEnumerator();
         int count = 0;
 
@@ -106,7 +99,7 @@ public class Task1Tests
     [TestMethod]
     public void AllMonthsHaveCorrectNames()
     {
-        MonthsInYear months = new MonthsInYear(2023);
+        MonthsInYear months = TestDataFactory.CreateMonthsInYear();
         string[] expectedNames =
         [
             "Январь",
