@@ -25,7 +25,7 @@ public class Task1Tests
     public void MonthsWith31DaysReturns7Months()
     {
         MonthsInYear months = CreateTestMonths();
-        List<Month> result = months.Where(m => m.Days == 31).ToList();
+        List<Month> result = [.. months.Where(m => m.Days == 31)];
 
         Assert.AreEqual(7, result.Count);
         Assert.IsTrue(result.All(m => m.Days == 31));
@@ -73,7 +73,7 @@ public class Task1Tests
     [TestMethod]
     public void FebruaryHasCorrectDaysInLeapYear()
     {
-        MonthsInYear leapYearMonths = new MonthsInYear(2020); // Високосный год
+        MonthsInYear leapYearMonths = new MonthsInYear(2020);
         Month february = leapYearMonths.Single(m => m.Number == 2);
 
         Assert.AreEqual(29, february.Days);
@@ -82,7 +82,7 @@ public class Task1Tests
     [TestMethod]
     public void FebruaryHasCorrectDaysInNonLeapYear()
     {
-        MonthsInYear nonLeapYearMonths = new MonthsInYear(2023); // Невисокосный год
+        MonthsInYear nonLeapYearMonths = new MonthsInYear(2023);
         Month february = nonLeapYearMonths.Single(m => m.Number == 2);
 
         Assert.AreEqual(28, february.Days);
