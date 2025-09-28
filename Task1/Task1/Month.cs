@@ -1,6 +1,6 @@
 namespace UserCollections1;
 
-public class Month
+public sealed class Month
 {
     public Month(int number, string name, int days)
     {
@@ -9,9 +9,9 @@ public class Month
         Days = days;
     }
 
-    public int Number { get; set; }
+    public int Number { get; }
 
-    public string Name { get; set; }
+    public string Name { get; }
 
-    public int Days { get; set; }
+    public int Days { get; }
 }
