@@ -9,18 +9,18 @@ public class Task1Tests
     {
         return
         [
-            new Month(1, "������", 31),
-            new Month(2, "�������", 28),
-            new Month(3, "����", 31),
-            new Month(4, "������", 30),
-            new Month(5, "���", 31),
-            new Month(6, "����", 30),
-            new Month(7, "����", 31),
-            new Month(8, "������", 31),
-            new Month(9, "��������", 30),
-            new Month(10, "�������", 31),
-            new Month(11, "������", 30),
-            new Month(12, "�������", 31),
+            new Month(1, "Январь", 31),
+            new Month(2, "Февраль", 28),
+            new Month(3, "Март", 31),
+            new Month(4, "Апрель", 30),
+            new Month(5, "Май", 31),
+            new Month(6, "Июнь", 30),
+            new Month(7, "Июль", 31),
+            new Month(8, "Август", 31),
+            new Month(9, "Сентябрь", 30),
+            new Month(10, "Октябрь", 31),
+            new Month(11, "Ноябрь", 30),
+            new Month(12, "Декабрь", 31),
         ];
     }
 
@@ -31,7 +31,7 @@ public class Task1Tests
         List<Month> result = [.. list.Where(m => m.Number == 5)];
 
         Assert.AreEqual(1, result.Count);
-        Assert.AreEqual("���", result[0].Name);
+        Assert.AreEqual("Май", result[0].Name);
         Assert.AreEqual(31, result[0].Days);
     }
 
@@ -58,10 +58,10 @@ public class Task1Tests
     [TestMethod]
     public void MonthClassCreatesCorrectly()
     {
-        Month month = new Month(5, "���", 31);
+        Month month = new Month(5, "Май", 31);
 
         Assert.AreEqual(5, month.Number);
-        Assert.AreEqual("���", month.Name);
+        Assert.AreEqual("Май", month.Name);
         Assert.AreEqual(31, month.Days);
     }
 }
