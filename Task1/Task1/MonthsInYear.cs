@@ -31,12 +31,8 @@ public sealed class MonthsInYear : IEnumerable<Month>
 
     public IEnumerator<Month> GetEnumerator()
     {
-        IEnumerable<int> daysInMonths = Enumerable.Range(1, 12)
-            .Select(month => DateTime.DaysInMonth(_year, month));
-
         return RussianMonthNames
-            .Zip(Enumerable.Range(1, 12), (name, number) => (name, number))
-            .Zip(daysInMonths, (first, days) => new Month(first.number, first.name, days))
+            .Zip(Enumerable.Range(1, 12), (name, number) => new Month(number, name, DateTime.DaysInMonth(_year, number)))
             .GetEnumerator();
     }
 
