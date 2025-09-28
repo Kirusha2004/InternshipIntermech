@@ -5,41 +5,27 @@ namespace UserCollections.Tests1;
 [TestClass]
 public class Task1Tests
 {
-    private static List<Month> CreateTestMonths()
+    private static MonthsInYear CreateTestMonths()
     {
-        return
-        [
-            new Month(1, "Январь", 31),
-            new Month(2, "Февраль", 28),
-            new Month(3, "Март", 31),
-            new Month(4, "Апрель", 30),
-            new Month(5, "Май", 31),
-            new Month(6, "Июнь", 30),
-            new Month(7, "Июль", 31),
-            new Month(8, "Август", 31),
-            new Month(9, "Сентябрь", 30),
-            new Month(10, "Октябрь", 31),
-            new Month(11, "Ноябрь", 30),
-            new Month(12, "Декабрь", 31),
-        ];
+        return new MonthsInYear(2023);
     }
 
     [TestMethod]
     public void MonthByNumberReturnsCorrectMonth()
     {
-        List<Month> list = CreateTestMonths();
-        List<Month> result = [.. list.Where(m => m.Number == 5)];
+        MonthsInYear months = CreateTestMonths();
+        Month result = months.Single(m => m.Number == 5);
 
-        Assert.AreEqual(1, result.Count);
-        Assert.AreEqual("Май", result[0].Name);
-        Assert.AreEqual(31, result[0].Days);
+        Assert.AreEqual(5, result.Number);
+        Assert.AreEqual("Май", result.Name);
+        Assert.AreEqual(31, result.Days);
     }
 
     [TestMethod]
     public void MonthsWith31DaysReturns7Months()
     {
-        List<Month> list = CreateTestMonths();
-        List<Month> result = [.. list.Where(m => m.Days == 31)];
+        MonthsInYear months = CreateTestMonths();
+        List<Month> result = months.Where(m => m.Days == 31).ToList();
 
         Assert.AreEqual(7, result.Count);
         Assert.IsTrue(result.All(m => m.Days == 31));
@@ -48,8 +34,8 @@ public class Task1Tests
     [TestMethod]
     public void MonthsAfterJuneWith30DaysReturns2Months()
     {
-        List<Month> list = CreateTestMonths();
-        List<Month> result = [.. list.Where(m => m.Number > 6 && m.Days == 30)];
+        MonthsInYear months = CreateTestMonths();
+        List<Month> result = months.Where(m => m.Number > 6 && m.Days == 30).ToList();
 
         Assert.AreEqual(2, result.Count);
         Assert.IsTrue(result.All(m => m.Number > 6 && m.Days == 30));
@@ -63,5 +49,83 @@ public class Task1Tests
         Assert.AreEqual(5, month.Number);
         Assert.AreEqual("Май", month.Name);
         Assert.AreEqual(31, month.Days);
+    }
+
+    [TestMethod]
+    public void MonthsInYearContains12Months()
+    {
+        MonthsInYear months = new MonthsInYear(2023);
+        int count = months.Count();
+
+        Assert.AreEqual(12, count);
+    }
+
+    [TestMethod]
+    public void MonthsInYearCurrentYearConstructorWorks()
+    {
+        int currentYear = DateTime.Now.Year;
+        MonthsInYear months = new MonthsInYear();
+
+        Assert.AreEqual(12, months.Count());
+        Assert.IsTrue(months.All(m => m.Number is >= 1 and <= 12));
+    }
+
+    [TestMethod]
+    public void FebruaryHasCorrectDaysInLeapYear()
+    {
+        MonthsInYear leapYearMonths = new MonthsInYear(2020); // Високосный год
+        Month february = leapYearMonths.Single(m => m.Number == 2);
+
+        Assert.AreEqual(29, february.Days);
+    }
+
+    [TestMethod]
+    public void FebruaryHasCorrectDaysInNonLeapYear()
+    {
+        MonthsInYear nonLeapYearMonths = new MonthsInYear(2023); // Невисокосный год
+        Month february = nonLeapYearMonths.Single(m => m.Number == 2);
+
+        Assert.AreEqual(28, february.Days);
+    }
+
+    [TestMethod]
+    public void MonthsInYearImplementsIEnumerableCorrectly()
+    {
+        MonthsInYear months = new MonthsInYear(2023);
+        IEnumerator<Month> enumerator = months.GetEnumerator();
+        int count = 0;
+
+        while (enumerator.MoveNext())
+        {
+            count++;
+            Assert.IsNotNull(enumerator.Current);
+        }
+
+        Assert.AreEqual(12, count);
+    }
+
+    [TestMethod]
+    public void AllMonthsHaveCorrectNames()
+    {
+        MonthsInYear months = new MonthsInYear(2023);
+        string[] expectedNames =
+        [
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь",
+        ];
+
+        string[] actualNames = months.Select(m => m.Name).ToArray();
+
+        CollectionAssert.AreEqual(expectedNames, actualNames);
     }
 }
