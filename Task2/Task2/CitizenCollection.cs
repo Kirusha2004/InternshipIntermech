@@ -4,23 +4,30 @@ namespace Task2;
 
 public sealed class CitizenCollection : IEnumerable<Citizen>
 {
-    private readonly List<Citizen> _citizens = [];
+    private readonly IList<Citizen> _citizens = new List<Citizen>();
 
     public int Add(Citizen citizen)
     {
         ArgumentNullException.ThrowIfNull(citizen);
 
-        if (_citizens.Any(c => c.Equals(citizen)))
+        if (_citizens.Contains(citizen))
         {
-            Console.WriteLine(
-                "Гражданин с таким номером паспорта уже существует в коллекции."
-            );
+            Console.WriteLine("Гражданин с таким номером паспорта уже существует в коллекции.");
             return -1;
         }
 
         if (citizen is Pensioner)
         {
-            int lastPensionerIndex = _citizens.FindLastIndex(c => c is Pensioner);
+            int lastPensionerIndex = -1;
+            for (int i = _citizens.Count - 1; i >= 0; i--)
+            {
+                if (_citizens[i] is Pensioner)
+                {
+                    lastPensionerIndex = i;
+                    break;
+                }
+            }
+
             int insertIndex = lastPensionerIndex == -1 ? 0 : lastPensionerIndex + 1;
             _citizens.Insert(insertIndex, citizen);
             return insertIndex + 1;
@@ -34,7 +41,7 @@ public sealed class CitizenCollection : IEnumerable<Citizen>
 
     public Citizen Remove()
     {
-        if (_citizens.Count == 0)
+        if (!_citizens.Any())
         {
             throw new InvalidOperationException("Коллекция пуста.");
         }
@@ -46,20 +53,21 @@ public sealed class CitizenCollection : IEnumerable<Citizen>
 
     public bool Remove(Citizen citizen)
     {
-        return citizen == null ? throw new ArgumentNullException(nameof(citizen)) : _citizens.Remove(citizen);
+        ArgumentNullException.ThrowIfNull(citizen);
+        return _citizens.Remove(citizen);
     }
 
-    public (bool exists, int position) Contains(Citizen citizen)
+    public ElementPosition Contains(Citizen citizen)
     {
         ArgumentNullException.ThrowIfNull(citizen);
 
-        int index = _citizens.FindIndex(c => c.Equals(citizen));
-        return (index != -1, index != -1 ? index + 1 : -1);
+        int index = _citizens.IndexOf(citizen);
+        return new ElementPosition(index != -1, index != -1 ? index + 1 : -1);
     }
 
-    public (Citizen? citizen, int position) ReturnLast()
+    public CitizenWithPosition ReturnLast()
     {
-        return _citizens.Count == 0 ? ((Citizen? citizen, int position))(null, -1) : ((Citizen? citizen, int position))(_citizens[^1], _citizens.Count);
+        return !_citizens.Any() ? new CitizenWithPosition(null, -1) : new CitizenWithPosition(_citizens[^1], _citizens.Count);
     }
 
     public void Clear()
@@ -77,5 +85,41 @@ public sealed class CitizenCollection : IEnumerable<Citizen>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+}
+
+public readonly struct ElementPosition
+{
+    public bool Exists { get; }
+    public int Position { get; }
+
+    public ElementPosition(bool exists, int position)
+    {
+        Exists = exists;
+        Position = position;
+    }
+
+    public void Deconstruct(out bool exists, out int position)
+    {
+        exists = Exists;
+        position = Position;
+    }
+}
+
+public readonly struct CitizenWithPosition
+{
+    public Citizen? Citizen { get; }
+    public int Position { get; }
+
+    public CitizenWithPosition(Citizen? citizen, int position)
+    {
+        Citizen = citizen;
+        Position = position;
+    }
+
+    public void Deconstruct(out Citizen? citizen, out int position)
+    {
+        citizen = Citizen;
+        position = Position;
     }
 }
