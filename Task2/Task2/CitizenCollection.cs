@@ -4,7 +4,7 @@ namespace Task2;
 
 public sealed class CitizenCollection : IEnumerable<Citizen>
 {
-    private readonly IList<Citizen> _citizens = new List<Citizen>();
+    private readonly IList<Citizen> _citizens = [];
 
     public int Add(Citizen citizen)
     {
@@ -46,7 +46,9 @@ public sealed class CitizenCollection : IEnumerable<Citizen>
             throw new InvalidOperationException("Коллекция пуста.");
         }
 
-        Citizen firstCitizen = _citizens[0];
+#pragma warning disable S6608 // Prefer indexing instead of "Enumerable" methods on types implementing "IList"
+        Citizen firstCitizen = _citizens.First();
+#pragma warning restore S6608 // Prefer indexing instead of "Enumerable" methods on types implementing "IList"
         _citizens.RemoveAt(0);
         return firstCitizen;
     }
@@ -67,7 +69,11 @@ public sealed class CitizenCollection : IEnumerable<Citizen>
 
     public CitizenWithPosition ReturnLast()
     {
-        return !_citizens.Any() ? new CitizenWithPosition(null, -1) : new CitizenWithPosition(_citizens[^1], _citizens.Count);
+#pragma warning disable S6608 // Prefer indexing instead of "Enumerable" methods on types implementing "IList"
+        return !_citizens.Any()
+            ? new CitizenWithPosition(null, -1)
+            : new CitizenWithPosition(_citizens.Last(), _citizens.Count);
+#pragma warning restore S6608 // Prefer indexing instead of "Enumerable" methods on types implementing "IList"
     }
 
     public void Clear()
@@ -85,41 +91,5 @@ public sealed class CitizenCollection : IEnumerable<Citizen>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
-    }
-}
-
-public readonly struct ElementPosition
-{
-    public bool Exists { get; }
-    public int Position { get; }
-
-    public ElementPosition(bool exists, int position)
-    {
-        Exists = exists;
-        Position = position;
-    }
-
-    public void Deconstruct(out bool exists, out int position)
-    {
-        exists = Exists;
-        position = Position;
-    }
-}
-
-public readonly struct CitizenWithPosition
-{
-    public Citizen? Citizen { get; }
-    public int Position { get; }
-
-    public CitizenWithPosition(Citizen? citizen, int position)
-    {
-        Citizen = citizen;
-        Position = position;
-    }
-
-    public void Deconstruct(out Citizen? citizen, out int position)
-    {
-        citizen = Citizen;
-        position = Position;
     }
 }
