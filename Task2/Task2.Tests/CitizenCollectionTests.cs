@@ -110,7 +110,6 @@ public class CitizenCollectionTests
 
         (Citizen? lastCitizen, int position) = collection.ReturnLast();
 
-        Assert.IsNotNull(lastCitizen);
         Assert.AreEqual(worker, lastCitizen);
         Assert.AreEqual(2, position);
     }
