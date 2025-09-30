@@ -1,107 +1,102 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Linq;
+namespace Task3.Tests;
 
-namespace Task3.Tests
+[TestClass]
+public class MathOperationsTests
 {
-    [TestClass]
-    public class MathOperationsTests
+    private static readonly IList<int> ExpectedSquaresForMixedNumbers = new List<int> { 1, 9, 25 };
+    private static readonly IList<int> ExpectedSquaresForAllOddNumbers = new List<int> { 1, 9, 25, 49 };
+    private static readonly IList<int> ExpectedSquaresForNegativeNumbers = new List<int> { 9, 1, 1, 9 };
+
+    [TestMethod]
+    public void SquaresReturnsCorrectSquaresForMixedNumbers()
     {
-        private static readonly IList<int> ExpectedSquaresForMixedNumbers = new List<int> { 1, 9, 25 };
-        private static readonly IList<int> ExpectedSquaresForAllOddNumbers = new List<int> { 1, 9, 25, 49 };
-        private static readonly IList<int> ExpectedSquaresForNegativeNumbers = new List<int> { 9, 1, 1, 9 };
+        IList<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6 };
+        var squares = new Squares(numbers);
 
-        [TestMethod]
-        public void SquaresReturnsCorrectSquaresForMixedNumbers()
+        IList<int> result = squares.ToList();
+
+        CollectionAssert.AreEqual(ExpectedSquaresForMixedNumbers.ToList(), result.ToList());
+    }
+
+    [TestMethod]
+    public void SquaresWithOnlyEvenNumbersReturnsEmpty()
+    {
+        IList<int> numbers = new List<int> { 2, 4, 6, 8 };
+        var squares = new Squares(numbers);
+
+        IList<int> result = squares.ToList();
+
+        Assert.AreEqual(0, result.Count);
+    }
+
+    [TestMethod]
+    public void SquaresWithOnlyOddNumbersReturnsAllSquares()
+    {
+        IList<int> numbers = new List<int> { 1, 3, 5, 7 };
+        var squares = new Squares(numbers);
+
+        IList<int> result = squares.ToList();
+
+        CollectionAssert.AreEqual(ExpectedSquaresForAllOddNumbers.ToList(), result.ToList());
+    }
+
+    [TestMethod]
+    public void SquaresWithEmptyArrayReturnsEmpty()
+    {
+        IList<int> numbers = new List<int>();
+        var squares = new Squares(numbers);
+
+        IList<int> result = squares.ToList();
+
+        Assert.AreEqual(0, result.Count);
+    }
+
+    [TestMethod]
+    public void SquaresWithNegativeOddNumbersReturnsPositiveSquares()
+    {
+        IList<int> numbers = new List<int> { -3, -2, -1, 0, 1, 2, 3 };
+        var squares = new Squares(numbers);
+
+        IList<int> result = squares.ToList();
+
+        CollectionAssert.AreEqual(ExpectedSquaresForNegativeNumbers.ToList(), result.ToList());
+    }
+
+    [TestMethod]
+    public void SquaresWithZeroReturnsEmpty()
+    {
+        IList<int> numbers = new List<int> { 0 };
+        var squares = new Squares(numbers);
+
+        IList<int> result = squares.ToList();
+
+        Assert.AreEqual(0, result.Count);
+    }
+
+    [TestMethod]
+    public void SquaresWithLargeNumbersWorksCorrectly()
+    {
+        IList<int> numbers = new List<int> { 999, 1000, 1001 };
+        var squares = new Squares(numbers);
+
+        IList<int> result = squares.ToList();
+
+        CollectionAssert.AreEqual(new List<int> { 999 * 999, 1001 * 1001 }, result.ToList());
+    }
+
+    [TestMethod]
+    public void SquaresUsesYieldReturn()
+    {
+        IList<int> numbers = new List<int> { 1, 2, 3 };
+        var squares = new Squares(numbers);
+
+        int count = 0;
+        foreach (int item in squares)
         {
-            IList<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6 };
-            var squares = new Squares(numbers);
-
-            IList<int> result = squares.ToList();
-
-            CollectionAssert.AreEqual(ExpectedSquaresForMixedNumbers.ToList(), result.ToList());
+            count++;
+            Assert.IsTrue(item == 1 || item == 9);
         }
 
-        [TestMethod]
-        public void SquaresWithOnlyEvenNumbersReturnsEmpty()
-        {
-            IList<int> numbers = new List<int> { 2, 4, 6, 8 };
-            var squares = new Squares(numbers);
-
-            IList<int> result = squares.ToList();
-
-            Assert.AreEqual(0, result.Count);
-        }
-
-        [TestMethod]
-        public void SquaresWithOnlyOddNumbersReturnsAllSquares()
-        {
-            IList<int> numbers = new List<int> { 1, 3, 5, 7 };
-            var squares = new Squares(numbers);
-
-            IList<int> result = squares.ToList();
-
-            CollectionAssert.AreEqual(ExpectedSquaresForAllOddNumbers.ToList(), result.ToList());
-        }
-
-        [TestMethod]
-        public void SquaresWithEmptyArrayReturnsEmpty()
-        {
-            IList<int> numbers = new List<int>();
-            var squares = new Squares(numbers);
-
-            IList<int> result = squares.ToList();
-
-            Assert.AreEqual(0, result.Count);
-        }
-
-        [TestMethod]
-        public void SquaresWithNegativeOddNumbersReturnsPositiveSquares()
-        {
-            IList<int> numbers = new List<int> { -3, -2, -1, 0, 1, 2, 3 };
-            var squares = new Squares(numbers);
-
-            IList<int> result = squares.ToList();
-
-            CollectionAssert.AreEqual(ExpectedSquaresForNegativeNumbers.ToList(), result.ToList());
-        }
-
-        [TestMethod]
-        public void SquaresWithZeroReturnsEmpty()
-        {
-            IList<int> numbers = new List<int> { 0 };
-            var squares = new Squares(numbers);
-
-            IList<int> result = squares.ToList();
-
-            Assert.AreEqual(0, result.Count);
-        }
-
-        [TestMethod]
-        public void SquaresWithLargeNumbersWorksCorrectly()
-        {
-            IList<int> numbers = new List<int> { 999, 1000, 1001 };
-            var squares = new Squares(numbers);
-
-            IList<int> result = squares.ToList();
-
-            CollectionAssert.AreEqual(new List<int> { 999 * 999, 1001 * 1001 }, result.ToList());
-        }
-
-        [TestMethod]
-        public void SquaresUsesYieldReturn()
-        {
-            IList<int> numbers = new List<int> { 1, 2, 3 };
-            var squares = new Squares(numbers);
-
-            int count = 0;
-            foreach (int item in squares)
-            {
-                count++;
-                Assert.IsTrue(item == 1 || item == 9);
-            }
-
-            Assert.AreEqual(2, count);
-        }
+        Assert.AreEqual(2, count);
     }
 }

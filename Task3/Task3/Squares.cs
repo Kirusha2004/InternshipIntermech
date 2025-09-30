@@ -1,33 +1,32 @@
 using System.Collections;
-using System.Collections.Generic;
 
-namespace Task3
+namespace Task3;
+
+public sealed class Squares : IEnumerable<int>
 {
-    public sealed class Squares : IEnumerable<int>
+    private readonly IEnumerable<int> _numbers;
+
+    public Squares(IList<int> numbers)
     {
-        private readonly IList<int> _numbers;
+        _numbers = numbers ?? throw new ArgumentNullException(nameof(numbers));
+    }
 
-        public Squares(IList<int> numbers)
+    public IEnumerator<int> GetEnumerator()
+    {
+        IEnumerator<int> enumerator = _numbers.GetEnumerator();
+        while (enumerator.MoveNext())
         {
-            _numbers = numbers ?? throw new ArgumentNullException(nameof(numbers));
-        }
+            int number = enumerator.Current;
 
-        public IEnumerator<int> GetEnumerator()
-        {
-#pragma warning disable S3267 // Loops should be simplified with "LINQ" expressions
-            foreach (int number in _numbers)
+            if (number % 2 != 0)
             {
-                if (number % 2 != 0)
-                {
-                    yield return number * number;
-                }
+                yield return number * number;
             }
-#pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
         }
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
