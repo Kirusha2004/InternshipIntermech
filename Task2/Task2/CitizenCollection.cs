@@ -46,9 +46,7 @@ public sealed class CitizenCollection : IEnumerable<Citizen>
             throw new InvalidOperationException("Коллекция пуста.");
         }
 
-#pragma warning disable S6608 // Prefer indexing instead of "Enumerable" methods on types implementing "IList"
         Citizen firstCitizen = _citizens.First();
-#pragma warning restore S6608 // Prefer indexing instead of "Enumerable" methods on types implementing "IList"
         _citizens.RemoveAt(0);
         return firstCitizen;
     }
@@ -69,11 +67,9 @@ public sealed class CitizenCollection : IEnumerable<Citizen>
 
     public CitizenWithPosition ReturnLast()
     {
-#pragma warning disable S6608 // Prefer indexing instead of "Enumerable" methods on types implementing "IList"
         return !_citizens.Any()
             ? new CitizenWithPosition(null, -1)
             : new CitizenWithPosition(_citizens.Last(), _citizens.Count);
-#pragma warning restore S6608 // Prefer indexing instead of "Enumerable" methods on types implementing "IList"
     }
 
     public void Clear()
