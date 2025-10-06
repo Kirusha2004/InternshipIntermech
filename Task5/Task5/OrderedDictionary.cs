@@ -1,22 +1,25 @@
-
 using System.Collections;
 
+
 namespace Task5;
-public class OrderedDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
+
+public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 {
-    private readonly List<KeyValuePair<TKey, TValue>> _items = new List<KeyValuePair<TKey, TValue>>();
-    private readonly Dictionary<TKey, int> _indexMap;
+    private readonly IList<KeyValuePair<TKey, TValue>> _items;
+    private readonly IDictionary<TKey, int> _indexMap;
     private readonly IEqualityComparer<TKey> _comparer;
 
-    public OrderedDictionary() : this(null) { }
+    public OrderedDictionary() : this(new MyEqualityComparer<TKey>()) { }
 
     public OrderedDictionary(IEqualityComparer<TKey> comparer)
     {
         _comparer = comparer ?? new MyEqualityComparer<TKey>();
+        _items = new List<KeyValuePair<TKey, TValue>>();
         _indexMap = new Dictionary<TKey, int>(_comparer);
     }
 
     public int Count => _items.Count;
+    public bool IsReadOnly => false;
 
     public TValue this[TKey key]
     {
@@ -42,6 +45,9 @@ public class OrderedDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TV
 
     public KeyValuePair<TKey, TValue> this[int index] => _items[index];
 
+    public ICollection<TKey> Keys => _items.Select(kvp => kvp.Key).ToList();
+    public ICollection<TValue> Values => _items.Select(kvp => kvp.Value).ToList();
+
     public void Add(TKey key, TValue value)
     {
         if (_indexMap.ContainsKey(key))
@@ -49,6 +55,11 @@ public class OrderedDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TV
 
         _items.Add(new KeyValuePair<TKey, TValue>(key, value));
         _indexMap[key] = _items.Count - 1;
+    }
+
+    public void Add(KeyValuePair<TKey, TValue> item)
+    {
+        Add(item.Key, item.Value);
     }
 
     public bool Remove(TKey key)
@@ -67,9 +78,25 @@ public class OrderedDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TV
         return true;
     }
 
+    public bool Remove(KeyValuePair<TKey, TValue> item)
+    {
+        if (TryGetValue(item.Key, out TValue value) &&
+            EqualityComparer<TValue>.Default.Equals(value, item.Value))
+        {
+            return Remove(item.Key);
+        }
+        return false;
+    }
+
     public bool ContainsKey(TKey key)
     {
         return _indexMap.ContainsKey(key);
+    }
+
+    public bool Contains(KeyValuePair<TKey, TValue> item)
+    {
+        return TryGetValue(item.Key, out TValue value) &&
+               EqualityComparer<TValue>.Default.Equals(value, item.Value);
     }
 
     public bool TryGetValue(TKey key, out TValue value)
@@ -79,7 +106,7 @@ public class OrderedDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TV
             value = _items[index].Value;
             return true;
         }
-        value = default(TValue);
+        value = default;
         return false;
     }
 
@@ -92,6 +119,11 @@ public class OrderedDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TV
     {
         _items.Clear();
         _indexMap.Clear();
+    }
+
+    public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+    {
+        _items.CopyTo(array, arrayIndex);
     }
 
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
