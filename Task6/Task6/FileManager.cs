@@ -3,79 +3,106 @@ using System.Text;
 
 namespace Task6;
 
-public class FileManager
+public class FileManager : IFileManager
 {
-    public static string? FindFile(string fileName, string searchPath = "C:\\")
+    public string FindFile(string fileName, string searchPath = null)
     {
+        searchPath ??= Path.GetPathRoot(Environment.CurrentDirectory) ?? "/";
+
+        if (!Directory.Exists(searchPath))
+        {
+            throw new DirectoryNotFoundException($"Директория не существует: {searchPath}");
+        }
+
         try
         {
-            if (!Directory.Exists(searchPath))
-            {
-                Console.WriteLine($"Путь не существует: {searchPath}");
-                return null;
-            }
-
-            string[] files = Directory.GetFiles(searchPath, fileName, SearchOption.AllDirectories);
-            return files.Length > 0 ? files[0] : null;
+            return SafeFileSearch(fileName, searchPath);
         }
-        catch (UnauthorizedAccessException)
+        catch (UnauthorizedAccessException ex)
         {
-            Console.WriteLine($"Нет доступа к некоторым папкам в пути: {searchPath}");
-            return null;
+            throw new UnauthorizedAccessException($"Нет доступа к некоторым папкам в пути: {searchPath}", ex);
         }
-        catch (Exception ex)
+        catch (FileNotFoundException)
         {
-            Console.WriteLine($"Ошибка поиска: {ex.Message}");
-            return null;
+            throw new FileNotFoundException($"Файл '{fileName}' не найден в директории: {searchPath}");
         }
     }
 
-    public static string ViewFile(string path)
+    private string SafeFileSearch(string fileName, string searchPath)
+    {
+        try
+        {
+            var files = Directory.EnumerateFiles(searchPath, fileName, SearchOption.TopDirectoryOnly);
+            var foundFile = files.FirstOrDefault();
+            if (foundFile != null)
+                return foundFile;
+
+            foreach (var dir in Directory.EnumerateDirectories(searchPath))
+            {
+                try
+                {
+                    var result = SafeFileSearch(fileName, dir);
+                    return result; 
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    continue;
+                }
+                catch (FileNotFoundException)
+                {
+                    continue;
+                }
+            }
+
+            throw new FileNotFoundException($"Файл '{fileName}' не найден в директории: {searchPath}");
+        }
+        catch (UnauthorizedAccessException)
+        {
+            throw new FileNotFoundException($"Файл '{fileName}' не найден (отсутствует доступ к некоторым директориям)");
+        }
+    }
+
+    public string ViewFile(string path)
     {
         if (!File.Exists(path))
         {
-            return "Файл не найден";
+            throw new FileNotFoundException($"Файл не найден: {path}");
         }
 
         try
         {
             using var reader = new StreamReader(path, Encoding.UTF8);
-            string textFromFile = reader.ReadToEnd();
-            Console.WriteLine($"Текст из файла: {textFromFile}");
-            return textFromFile;
+            string content = reader.ReadToEnd();
+            Console.WriteLine($"Текст из файла: {content}");
+            return content;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            Console.WriteLine($"Ошибка чтения файла: {ex.Message}");
-            return $"Ошибка чтения файла: {ex.Message}";
+            throw new IOException($"Ошибка чтения файла: {ex.Message}", ex);
         }
     }
 
-    public static bool CompressFile(string filePath)
+    public void CompressFile(string sourcePath, string targetPath = null)
     {
-        if (!File.Exists(filePath))
+        if (!File.Exists(sourcePath))
         {
-            return false;
+            throw new FileNotFoundException($"Исходный файл не найден: {sourcePath}");
         }
 
-        string compressedFile = filePath + ".gz";
+        targetPath ??= sourcePath + ".gz";
 
         try
         {
-            using (FileStream source = new FileStream(filePath, FileMode.Open))
-            using (FileStream target = new FileStream(compressedFile, FileMode.Create))
-            using (GZipStream gzip = new GZipStream(target, CompressionMode.Compress))
-            {
-                source.CopyTo(gzip);
-            }
+            using var source = File.OpenRead(sourcePath);
+            using var target = File.Create(targetPath);
+            using var gzip = new GZipStream(target, CompressionMode.Compress);
 
-            Console.WriteLine($"Файл сжат: {compressedFile}");
-            return File.Exists(compressedFile);
+            source.CopyTo(gzip);
+            Console.WriteLine($"Файл сжат: {targetPath}");
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            Console.WriteLine($"Ошибка сжатия: {ex.Message}");
-            return false;
+            throw new IOException($"Ошибка сжатия файла: {ex.Message}", ex);
         }
     }
 }
