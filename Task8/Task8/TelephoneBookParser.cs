@@ -1,28 +1,15 @@
-using System.Xml;
+using System.Xml.Linq;
 
 namespace Task8;
 
 public class TelephoneBookParser
 {
-    public static List<string> ParseTelephoneNumbers(string filePath)
+    public IList<string> ParseTelephoneNumbers(string filePath)
     {
-        List<string> numbers = new List<string>();
-        XmlDocument xDoc = new XmlDocument();
-        xDoc.Load(filePath);
-        XmlElement xRoot = xDoc.DocumentElement;
-        if (xRoot != null)
-        {
-            foreach (XmlElement xnode in xRoot)
-            {
-                foreach (XmlNode childnode in xnode.ChildNodes)
-                {
-                    if (childnode.Name == "TelephoneNumber")
-                    {
-                        numbers.Add(childnode.InnerText);
-                    }
-                }
-            }
-        }
-        return numbers;
+        XDocument xDoc = XDocument.Load(filePath);
+
+        return xDoc.Descendants("TelephoneNumber")
+                  .Select(node => node.Value.Trim())
+                  .ToList();
     }
 }
