@@ -5,12 +5,9 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task8", "Task8\Task8.csproj", "{BFEFC704-AA1A-459F-A5E3-0717530558A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task8.Tests", "Task8.Tests\Task8.Tests.csproj", "{1A7F0DB6-187B-4B6B-A8C4-553D1ECB70F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task8.Tests", "Task8.Tests\Task8.Tests.csproj", "{1A7F0DB6-187B-4B6B-A8C4-553D1ECB70F8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Task8.Tests", "Task8.Tests", "{5AE4FB76-9C44-4EAF-B8DE-2529D60750B5}"
-	ProjectSection(SolutionItems) = preProject
-		TelephoneBook.xml = TelephoneBook.xml
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

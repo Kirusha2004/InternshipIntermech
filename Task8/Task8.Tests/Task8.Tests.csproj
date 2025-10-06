@@ -20,4 +20,10 @@
     <ProjectReference Include="..\Task8\Task8.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TelephoneBook.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
