@@ -198,4 +198,72 @@ public class OrderedDictionaryTests
         CollectionAssert.AreEqual(new[] { 3, 1, 2 }, keys);
         CollectionAssert.AreEqual(new[] { "three", "one", "two" }, values);
     }
+
+    [TestMethod]
+    public void TestComplexObjectKey()
+    {
+        var dict = new OrderedDictionary<Person, string>();
+        var person1 = new Person { Id = 1, Name = "John" };
+        var person2 = new Person { Id = 1, Name = "John" };
+
+        dict.Add(person1, "Developer");
+
+        Assert.ThrowsException<KeyNotFoundException>(() => dict[person2]);
+    }
+
+    [TestMethod]
+    public void TestIDictionaryInterface()
+    {
+        IDictionary<string, int> dict = new OrderedDictionary<string, int>();
+        dict.Add("one", 1);
+        dict.Add(new KeyValuePair<string, int>("two", 2));
+
+        Assert.AreEqual(2, dict.Count);
+        Assert.IsTrue(dict.Contains(new KeyValuePair<string, int>("one", 1)));
+        Assert.IsFalse(dict.Contains(new KeyValuePair<string, int>("one", 999)));
+
+        var keys = dict.Keys.ToList();
+        var values = dict.Values.ToList();
+
+        CollectionAssert.AreEqual(new[] { "one", "two" }, keys);
+        CollectionAssert.AreEqual(new[] { 1, 2 }, values);
+    }
+
+    [TestMethod]
+    public void TestCopyTo()
+    {
+        var dict = new OrderedDictionary<string, int>();
+        dict.Add("one", 1);
+        dict.Add("two", 2);
+        dict.Add("three", 3);
+
+        var array = new KeyValuePair<string, int>[5];
+        dict.CopyTo(array, 1);
+
+        Assert.AreEqual(default(KeyValuePair<string, int>), array[0]);
+        Assert.AreEqual("one", array[1].Key);
+        Assert.AreEqual(1, array[1].Value);
+        Assert.AreEqual("two", array[2].Key);
+        Assert.AreEqual(2, array[2].Value);
+        Assert.AreEqual("three", array[3].Key);
+        Assert.AreEqual(3, array[3].Value);
+        Assert.AreEqual(default(KeyValuePair<string, int>), array[4]);
+    }
+
+    [TestMethod]
+    public void TestRemoveByKeyValuePair()
+    {
+        var dict = new OrderedDictionary<string, int>();
+        dict.Add("one", 1);
+        dict.Add("two", 2);
+
+        var removed = dict.Remove(new KeyValuePair<string, int>("one", 1));
+        Assert.IsTrue(removed);
+        Assert.AreEqual(1, dict.Count);
+        Assert.IsFalse(dict.ContainsKey("one"));
+
+        removed = dict.Remove(new KeyValuePair<string, int>("two", 999));
+        Assert.IsFalse(removed);
+        Assert.AreEqual(1, dict.Count);
+    }
 }
