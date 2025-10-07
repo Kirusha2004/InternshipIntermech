@@ -43,7 +43,7 @@ jobs:
       - name: Combine Coverage Reports
         uses: danielpalme/ReportGenerator-GitHub-Action@5.4.13
         with:
-          reports: "**/coverage.cobertura.xml"
+          reports: "coverage.cobertura.xml"
           targetdir: "${{ github.workspace }}/${{ matrix.task }}/coverage"
           reporttypes: "Cobertura"
           verbosity: "Info"
@@ -54,7 +54,7 @@ jobs:
       - name: Create Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: "${{ matrix.task }}/coverage.cobertura.xml"
+          filename: "${{ matrix.task }}/coverage/coverage.cobertura.xml"
           badge: true
           fail_below_min: true
           format: markdown
