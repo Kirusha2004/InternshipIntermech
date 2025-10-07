@@ -43,7 +43,7 @@ jobs:
       - name: Combine Coverage Reports
         uses: danielpalme/ReportGenerator-GitHub-Action@5.4.13
         with:
-          reports: "coverage.cobertura.xml"
+          reports: "**/coverage.cobertura.xml"
           targetdir: "${{ matrix.task }}/coverage"
           reporttypes: "Cobertura"
           verbosity: "Info"
