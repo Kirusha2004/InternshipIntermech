@@ -46,13 +46,13 @@ public class RegistrySettingsService
                 return key == null
                     ? GetDefaultSettings()
                     : new AppSettings
-                {
-                    BackgroundColor = (Color)ColorConverter.ConvertFromString((string)key.GetValue("BackgroundColor", "#FFFFFFFF")),
-                    TextColor = (Color)ColorConverter.ConvertFromString((string)key.GetValue("TextColor", "#FF000000")),
-                    FontSize = Convert.ToDouble(key.GetValue("FontSize", 16)),
-                    FontStyle = (string)key.GetValue("FontStyle", "Normal"),
-                    UseFileConfig = (int)key.GetValue("UseFileConfig", 1) == 1
-                };
+                    {
+                        BackgroundColor = (Color)ColorConverter.ConvertFromString((string)key.GetValue("BackgroundColor", "#FFFFFFFF")),
+                        TextColor = (Color)ColorConverter.ConvertFromString((string)key.GetValue("TextColor", "#FF000000")),
+                        FontSize = Convert.ToDouble(key.GetValue("FontSize", 16)),
+                        FontStyle = (string)key.GetValue("FontStyle", "Normal"),
+                        UseFileConfig = (int)key.GetValue("UseFileConfig", 1) == 1
+                    };
             }
         }
         catch (Exception ex)
