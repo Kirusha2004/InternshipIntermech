@@ -44,7 +44,7 @@ jobs:
         uses: danielpalme/ReportGenerator-GitHub-Action@5.4.13
         with:
           reports: "coverage.cobertura.xml"
-          targetdir: "${{ github.workspace }}/${{ matrix.task }}/coverage"
+          targetdir: "${{ matrix.task }}/coverage"
           reporttypes: "Cobertura"
           verbosity: "Info"
           title: "${{ matrix.task }} Code Coverage"
