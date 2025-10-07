@@ -54,7 +54,7 @@ jobs:
       - name: Create Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: "${{ matrix.task }}/coverage/coverage.cobertura.xml"
+          filename: "${{ matrix.task }}/coverage/Cobertura.xml"
           badge: true
           fail_below_min: true
           format: markdown
