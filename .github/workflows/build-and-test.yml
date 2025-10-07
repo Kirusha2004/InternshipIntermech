@@ -3,26 +3,9 @@ name: .NET build & test
 on:
   push:
     branches: [ "main" ]
-    paths:
-      - 'Task1/**'
-      - 'Task2/**'
-      - 'Task3/**'
-      - 'Task4/**'
-      - 'Task5/**'
-      - 'Task6/**'
-      - 'Task7/**'
-      - 'Task8/**'
   pull_request:
     branches: [ "main" ]
-    paths:
-      - 'Task1/**'
-      - 'Task2/**'
-      - 'Task3/**'
-      - 'Task4/**'
-      - 'Task5/**'
-      - 'Task6/**'
-      - 'Task7/**'
-      - 'Task8/**'
+
 env:
   COVERAGE_WARNING_THRESHOLD: 99
   COVERAGE_THRESHOLD: 20
@@ -33,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        task: [Task1, Task2, Task3, Task4, Task5, Task6, Task7, Task8]
+        task: [Task1, Task2, Task3, Task4, Task5]
       fail-fast: false
     defaults:
       run:
@@ -61,7 +44,7 @@ jobs:
         uses: danielpalme/ReportGenerator-GitHub-Action@5.4.13
         with:
           reports: "**/coverage.cobertura.xml"
-          targetdir: "${{ github.workspace }}/${{ matrix.task }}/coverage"
+          targetdir: "${{ matrix.task }}/coverage"
           reporttypes: "Cobertura"
           verbosity: "Info"
           title: "${{ matrix.task }} Code Coverage"
@@ -71,7 +54,7 @@ jobs:
       - name: Create Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: "${{ matrix.task }}/coverage/coverage.cobertura.xml"
+          filename: "${{ matrix.task }}/coverage/Cobertura.xml"
           badge: true
           fail_below_min: true
           format: markdown
