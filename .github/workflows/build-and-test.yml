@@ -31,54 +31,47 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task: [Task1, Task2, Task3, Task4, Task5, Task6, Task7, Task8]
+      fail-fast: false
+    defaults:
+      run:
+        working-directory: ./${{ matrix.task }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.x
-      - name: Determine changed task folder
-        id: detect-task
-        run: |
-          CHANGED_TASK=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^Task[0-9]\+' | head -1 | cut -d/ -f1)
-          
-          if [ -z "$CHANGED_TASK" ]; then
-            echo "❌ Не удалось определить изменённую задачу"
-            exit 1
-          fi
-          echo "Изменённая задача: $CHANGED_TASK"
-          echo "task=$CHANGED_TASK" >> $GITHUB_OUTPUT
 
       - name: Restore dependencies
         run: dotnet restore
-        working-directory: ./${{ steps.detect-task.outputs.task }}
 
       - name: Build
         run: dotnet build --no-restore -warnaserror /p:RunAnalyzers=true
-        working-directory: ./${{ steps.detect-task.outputs.task }}
 
       - name: Code style check
         run: dotnet format --verify-no-changes
-        working-directory: ./${{ steps.detect-task.outputs.task }}
 
       - name: Test
         run: dotnet test --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage"
-        working-directory: ./${{ steps.detect-task.outputs.task }}
 
       - name: Combine Coverage Reports
         uses: danielpalme/ReportGenerator-GitHub-Action@5.4.13
         with:
-          reports: "**/*.cobertura.xml"
-          targetdir: "${{ github.workspace }}"
+          reports: "**/coverage.cobertura.xml"
+          targetdir: "${{ github.workspace }}/${{ matrix.task }}/coverage"
           reporttypes: "Cobertura"
           verbosity: "Info"
-          title: "Code Coverage"
+          title: "${{ matrix.task }} Code Coverage"
           tag: "${{ github.run_number }}_${{ github.run_id }}"
           toolpath: "reportgeneratortool"
+
       - name: Create Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: "Cobertura.xml"
+          filename: "${{ matrix.task }}/coverage/coverage.cobertura.xml"
           badge: true
           fail_below_min: true
           format: markdown
@@ -88,8 +81,8 @@ jobs:
           output: both
           thresholds: "${{ env.COVERAGE_THRESHOLD }} ${{ env.COVERAGE_WARNING_THRESHOLD }}"
       - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
         if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]'
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
           path: code-coverage-results.md
@@ -97,4 +90,3 @@ jobs:
         run: dotnet tool install -g dotnet-stryker
       - name: Run mutation test
         run: dotnet stryker --mutation-level Complete --break-at ${{ env.MUTATION_THRESHOLD }}
-        working-directory: ./${{ steps.detect-task.outputs.task }}
