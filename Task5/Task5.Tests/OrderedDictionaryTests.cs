@@ -6,7 +6,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestAddAndGet()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "one", 1 },
             { "two", 2 },
@@ -20,7 +20,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestIndexerSetGet()
     {
-        OrderedDictionary<string, string> dict = new OrderedDictionary<string, string>
+        OrderedDictionary<string, string> dict = new()
         {
             ["first"] = "value1",
             ["second"] = "value2",
@@ -34,7 +34,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestIndexerUpdate()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             ["key"] = 2,
         };
@@ -46,7 +46,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestRemove()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "one", 1 },
             { "two", 2 },
@@ -65,7 +65,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestRemoveNonExistent()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "one", 1 },
         };
@@ -79,7 +79,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestContainsKey()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "test", 123 },
         };
@@ -91,7 +91,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestTryGetValue()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "exists", 42 },
         };
@@ -109,7 +109,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestIndexOf()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "first", 1 },
             { "second", 2 },
@@ -125,7 +125,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestClear()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "one", 1 },
             { "two", 2 },
@@ -141,7 +141,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestEnumeration()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "one", 1 },
             { "two", 2 },
@@ -193,7 +193,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestIndexAccess()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "one", 1 },
             { "two", 2 },
@@ -211,7 +211,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestOrderPreservation()
     {
-        OrderedDictionary<int, string> dict = new OrderedDictionary<int, string>
+        OrderedDictionary<int, string> dict = new()
         {
             { 3, "three" },
             { 1, "one" },
@@ -266,7 +266,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestCopyTo()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "one", 1 },
             { "two", 2 },
@@ -289,7 +289,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestRemoveByKeyValuePair()
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>
+        OrderedDictionary<string, int> dict = new()
         {
             { "one", 1 },
             { "two", 2 },
