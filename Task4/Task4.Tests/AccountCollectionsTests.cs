@@ -71,7 +71,7 @@ public class AccountCollectionsTests
             .Take(3);
 
         Assert.AreEqual(3, firstThree.Count());
-        List<int> keys = firstThree.Select(x => x.Key).ToList();
+        List<int> keys = [.. firstThree.Select(x => x.Key)];
         CollectionAssert.AreEqual(Expected, keys);
     }
 
