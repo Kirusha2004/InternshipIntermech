@@ -35,10 +35,10 @@ public class AccountCollectionsTests
     [TestMethod]
     public void TopAccountIdsByBalanceReturnsCorrectOrder()
     {
-        List<int> topAccountIds = _accountBalanceDict
-            .OrderByDescending(n => n.Value)
-            .Select(n => n.Key)
-            .ToList();
+        List<int> topAccountIds =
+        [
+            .. _accountBalanceDict.OrderByDescending(n => n.Value).Select(n => n.Key),
+        ];
 
         Assert.AreEqual(1005, topAccountIds[0]);
         Assert.AreEqual(1002, topAccountIds[1]);
@@ -117,10 +117,10 @@ public class AccountCollectionsTests
     [TestMethod]
     public void BalancesInEurosReturnsCorrectConversion()
     {
-        Dictionary<int, double> euros = new(_sortedAccountList.ToDictionary(
+        Dictionary<int, double> euros = _sortedAccountList.ToDictionary(
             n => n.Key,
             n => n.Value * 0.85
-        ));
+        );
 
         Assert.AreEqual(5, euros.Count);
         Assert.AreEqual(12750.6375, euros[1001], 0.001);
