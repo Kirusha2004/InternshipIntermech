@@ -11,7 +11,7 @@ public class MathOperationsTests
     public void SquaresReturnsCorrectSquaresForMixedNumbers()
     {
         IList<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6 };
-        var squares = new Squares(numbers);
+        Squares squares = new Squares(numbers);
 
         IList<int> result = squares.ToList();
 
@@ -22,7 +22,7 @@ public class MathOperationsTests
     public void SquaresWithOnlyEvenNumbersReturnsEmpty()
     {
         IList<int> numbers = new List<int> { 2, 4, 6, 8 };
-        var squares = new Squares(numbers);
+        Squares squares = new Squares(numbers);
 
         IList<int> result = squares.ToList();
 
@@ -33,7 +33,7 @@ public class MathOperationsTests
     public void SquaresWithOnlyOddNumbersReturnsAllSquares()
     {
         IList<int> numbers = new List<int> { 1, 3, 5, 7 };
-        var squares = new Squares(numbers);
+        Squares squares = new Squares(numbers);
 
         IList<int> result = squares.ToList();
 
@@ -44,7 +44,7 @@ public class MathOperationsTests
     public void SquaresWithEmptyArrayReturnsEmpty()
     {
         IList<int> numbers = new List<int>();
-        var squares = new Squares(numbers);
+        Squares squares = new Squares(numbers);
 
         IList<int> result = squares.ToList();
 
@@ -55,7 +55,7 @@ public class MathOperationsTests
     public void SquaresWithNegativeOddNumbersReturnsPositiveSquares()
     {
         IList<int> numbers = new List<int> { -3, -2, -1, 0, 1, 2, 3 };
-        var squares = new Squares(numbers);
+        Squares squares = new Squares(numbers);
 
         IList<int> result = squares.ToList();
 
@@ -66,7 +66,7 @@ public class MathOperationsTests
     public void SquaresWithZeroReturnsEmpty()
     {
         IList<int> numbers = new List<int> { 0 };
-        var squares = new Squares(numbers);
+        Squares squares = new Squares(numbers);
 
         IList<int> result = squares.ToList();
 
@@ -77,7 +77,7 @@ public class MathOperationsTests
     public void SquaresWithLargeNumbersWorksCorrectly()
     {
         IList<int> numbers = new List<int> { 999, 1000, 1001 };
-        var squares = new Squares(numbers);
+        Squares squares = new Squares(numbers);
 
         IList<int> result = squares.ToList();
 
@@ -88,13 +88,13 @@ public class MathOperationsTests
     public void SquaresUsesYieldReturn()
     {
         IList<int> numbers = new List<int> { 1, 2, 3 };
-        var squares = new Squares(numbers);
+        Squares squares = new Squares(numbers);
 
         int count = 0;
         foreach (int item in squares)
         {
             count++;
-            Assert.IsTrue(item == 1 || item == 9);
+            Assert.IsTrue(item is 1 or 9);
         }
 
         Assert.AreEqual(2, count);
