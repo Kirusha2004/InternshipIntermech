@@ -9,7 +9,7 @@ public class TelephoneBookParser
         XDocument xDoc = XDocument.Load(filePath);
 
         return xDoc.Descendants("TelephoneNumber")
-                  .Select(node => node.Value.Trim())
-                  .ToList();
+            .Select(node => node.Value.Trim())
+            .ToList();
     }
 }

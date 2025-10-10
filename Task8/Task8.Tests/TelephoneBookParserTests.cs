@@ -6,17 +6,20 @@ public class TelephoneBookParserTests
     [TestMethod]
     public void ParseTelephoneNumbersValidFileReturnsExpectedNumbers()
     {
-        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "TelephoneBook.xml");
-        var telephoneBookParser = new TelephoneBookParser();
+        string filePath = Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "TelephoneBook.xml"
+        );
+        TelephoneBookParser telephoneBookParser = new TelephoneBookParser();
 
-        var result = telephoneBookParser.ParseTelephoneNumbers(filePath);
+        IList<string> result = telephoneBookParser.ParseTelephoneNumbers(filePath);
 
-        IList<string> expected = new List<string>
-        {
+        IList<string> expected =
+        [
             "+375259527099",
             "+375259527088",
-            "+375339521077"
-        };
+            "+375339521077",
+        ];
         Assert.IsTrue(expected.SequenceEqual(result));
     }
 }
