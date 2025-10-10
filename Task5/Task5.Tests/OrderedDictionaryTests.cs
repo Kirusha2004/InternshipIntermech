@@ -198,8 +198,8 @@ public class OrderedDictionaryTests
             { 2, "two" },
         };
 
-        List<int> keys = dict.Select(kvp => kvp.Key).ToList();
-        List<string> values = dict.Select(kvp => kvp.Value).ToList();
+        List<int> keys = [.. dict.Select(kvp => kvp.Key)];
+        List<string> values = [.. dict.Select(kvp => kvp.Value)];
 
         int[] expectedKeys = [3, 1, 2];
         string[] expectedValues = ["three", "one", "two"];

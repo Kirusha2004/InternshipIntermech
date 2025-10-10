@@ -47,12 +47,12 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 
     private List<TKey> GetKeys()
     {
-        return _items.Select(kvp => kvp.Key).ToList();
+        return [.. _items.Select(kvp => kvp.Key)];
     }
 
     private List<TValue> GetValues()
     {
-        return _items.Select(kvp => kvp.Value).ToList();
+        return [.. _items.Select(kvp => kvp.Value)];
     }
 
     public void Add(TKey key, TValue value)
