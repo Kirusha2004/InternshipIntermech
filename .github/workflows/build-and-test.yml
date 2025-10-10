@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        task: [Task1, Task2, Task3, Task5]
+        task: [Task1, Task2, Task3, Task10]
       fail-fast: false
     defaults:
       run:
