@@ -1,0 +1,22 @@
+namespace Task7;
+
+public class Receipt
+{
+    private readonly IList<Product> _products = [];
+    public int ProductCount => _products.Count;
+
+    public void AddProduct(Product product)
+    {
+        _products.Add(product);
+    }
+
+    public decimal GetTotal()
+    {
+        return _products.Sum(p => p.Price * p.Amount);
+    }
+
+    public IList<Product> GetProducts()
+    {
+        return [.. _products];
+    }
+}
