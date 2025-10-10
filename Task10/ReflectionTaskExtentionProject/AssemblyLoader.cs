@@ -8,6 +8,20 @@ public class AssemblyLoader
     {
         try
         {
+            if (!File.Exists(assemblyPath))
+            {
+                string currentDir = Directory.GetCurrentDirectory();
+                string fullPath = Path.Combine(currentDir, assemblyPath);
+
+                if (!File.Exists(fullPath))
+                {
+                    throw new FileNotFoundException($"Сборка не найдена: {assemblyPath}. Текущая директория: {currentDir}");
+                }
+
+                assemblyPath = fullPath;
+            }
+
+            Console.WriteLine($"Загружаем сборку из: {assemblyPath}");
             return Assembly.LoadFrom(assemblyPath);
         }
         catch (FileNotFoundException e)
