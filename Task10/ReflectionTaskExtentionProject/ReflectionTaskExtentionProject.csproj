@@ -5,14 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
   <ItemGroup>
-    <None Remove="Task10.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Task10.dll">
+    <Content Include="..\Task10\bin\Debug\net8.0\Task10.dll">
+      <Link>Task10.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
- 
 </Project>
