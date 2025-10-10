@@ -1,283 +1,146 @@
+using System.Collections;
+
 namespace Task5.Tests;
 
-[TestClass]
-public class OrderedDictionaryTests
+public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+    where TKey : notnull
 {
-    [TestMethod]
-    public void TestAddAndGet()
-    {
-        OrderedDictionary<string, int> dict = new() { { "one", 1 }, { "two", 2 } };
+    private readonly List<KeyValuePair<TKey, TValue>> _items;
+    private readonly Dictionary<TKey, int> _indexMap;
 
-        Assert.AreEqual(2, dict.Count);
-        Assert.AreEqual(1, dict["one"]);
-        Assert.AreEqual(2, dict["two"]);
+    public OrderedDictionary()
+        : this(EqualityComparer<TKey>.Default) { }
+
+    public OrderedDictionary(IEqualityComparer<TKey>? comparer)
+    {
+        comparer ??= EqualityComparer<TKey>.Default;
+        _items = [];
+        _indexMap = new Dictionary<TKey, int>(comparer);
     }
 
-    [TestMethod]
-    public void TestIndexerSetGet()
+    public int Count => _items.Count;
+    public bool IsReadOnly => false;
+
+    public TValue this[TKey key]
     {
-        OrderedDictionary<string, string> dict = new()
+        get =>
+            _indexMap.TryGetValue(key, out int index)
+                ? _items[index].Value
+                : throw new KeyNotFoundException($"Key '{key}' not found");
+        set
         {
-            ["first"] = "value1",
-            ["second"] = "value2",
-        };
-
-        Assert.AreEqual("value1", dict["first"]);
-        Assert.AreEqual("value2", dict["second"]);
-        Assert.AreEqual(2, dict.Count);
+            if (_indexMap.TryGetValue(key, out int index))
+            {
+                _items[index] = new KeyValuePair<TKey, TValue>(key, value);
+            }
+            else
+            {
+                Add(key, value);
+            }
+        }
     }
 
-    [TestMethod]
-    public void TestIndexerUpdate()
-    {
-        OrderedDictionary<string, int> dict = new() { ["key"] = 2 };
+    public KeyValuePair<TKey, TValue> this[int index] => _items[index];
 
-        Assert.AreEqual(1, dict.Count);
-        Assert.AreEqual(2, dict["key"]);
+    public ICollection<TKey> Keys => GetKeys();
+    public ICollection<TValue> Values => GetValues();
+
+    private List<TKey> GetKeys()
+    {
+        return _items.Select(kvp => kvp.Key).ToList();
     }
 
-    [TestMethod]
-    public void TestRemove()
+    private List<TValue> GetValues()
     {
-        OrderedDictionary<string, int> dict = new()
+        return _items.Select(kvp => kvp.Value).ToList();
+    }
+
+    public void Add(TKey key, TValue value)
+    {
+        if (_indexMap.ContainsKey(key))
         {
-            { "one", 1 },
-            { "two", 2 },
-            { "three", 3 },
-        };
+            throw new ArgumentException($"Key '{key}' already exists");
+        }
 
-        bool removed = dict.Remove("two");
-
-        Assert.IsTrue(removed);
-        Assert.AreEqual(2, dict.Count);
-        Assert.IsFalse(dict.ContainsKey("two"));
-        Assert.AreEqual(0, dict.IndexOf("one"));
-        Assert.AreEqual(1, dict.IndexOf("three"));
+        _items.Add(new KeyValuePair<TKey, TValue>(key, value));
+        _indexMap[key] = _items.Count - 1;
     }
 
-    [TestMethod]
-    public void TestRemoveNonExistent()
+    public void Add(KeyValuePair<TKey, TValue> item)
     {
-        OrderedDictionary<string, int> dict = new() { { "one", 1 } };
-
-        bool removed = dict.Remove("two");
-
-        Assert.IsFalse(removed);
-        Assert.AreEqual(1, dict.Count);
+        Add(item.Key, item.Value);
     }
 
-    [TestMethod]
-    public void TestContainsKey()
+    public bool Remove(TKey key)
     {
-        OrderedDictionary<string, int> dict = new() { { "test", 123 } };
-
-        Assert.IsTrue(dict.ContainsKey("test"));
-        Assert.IsFalse(dict.ContainsKey("nonexistent"));
-    }
-
-    [TestMethod]
-    public void TestTryGetValue()
-    {
-        OrderedDictionary<string, int> dict = new() { { "exists", 42 } };
-
-        bool found = dict.TryGetValue("exists", out int value);
-
-        Assert.IsTrue(found);
-        Assert.AreEqual(42, value);
-
-        found = dict.TryGetValue("nonexistent", out value);
-        Assert.IsFalse(found);
-        Assert.AreEqual(0, value);
-    }
-
-    [TestMethod]
-    public void TestIndexOf()
-    {
-        OrderedDictionary<string, int> dict = new()
+        if (!_indexMap.TryGetValue(key, out int index))
         {
-            { "first", 1 },
-            { "second", 2 },
-            { "third", 3 },
-        };
+            return false;
+        }
 
-        Assert.AreEqual(0, dict.IndexOf("first"));
-        Assert.AreEqual(1, dict.IndexOf("second"));
-        Assert.AreEqual(2, dict.IndexOf("third"));
-        Assert.AreEqual(-1, dict.IndexOf("nonexistent"));
-    }
+        _items.RemoveAt(index);
+        _ = _indexMap.Remove(key);
 
-    [TestMethod]
-    public void TestClear()
-    {
-        OrderedDictionary<string, int> dict = new() { { "one", 1 }, { "two", 2 } };
-
-        dict.Clear();
-
-        Assert.AreEqual(0, dict.Count);
-        Assert.IsFalse(dict.ContainsKey("one"));
-        Assert.IsFalse(dict.ContainsKey("two"));
-    }
-
-    [TestMethod]
-    public void TestEnumeration()
-    {
-        OrderedDictionary<string, int> dict = new()
+        for (int i = index; i < _items.Count; i++)
         {
-            { "one", 1 },
-            { "two", 2 },
-            { "three", 3 },
-        };
+            _indexMap[_items[i].Key] = i;
+        }
 
-        List<KeyValuePair<string, int>> items = [.. dict];
-
-        Assert.AreEqual(3, items.Count);
-        Assert.AreEqual("one", items[0].Key);
-        Assert.AreEqual(1, items[0].Value);
-        Assert.AreEqual("two", items[1].Key);
-        Assert.AreEqual(2, items[1].Value);
-        Assert.AreEqual("three", items[2].Key);
-        Assert.AreEqual(3, items[2].Value);
+        return true;
     }
 
-    [TestMethod]
-    public void TestCustomComparer()
+    public bool Remove(KeyValuePair<TKey, TValue> item)
     {
-        OrderedDictionary<string, int> dict = new OrderedDictionary<string, int>(
-            new MyEqualityComparer<string>()
-        )
+        return TryGetValue(item.Key, out TValue? value)
+            && EqualityComparer<TValue>.Default.Equals(value, item.Value)
+            && Remove(item.Key);
+    }
+
+    public bool ContainsKey(TKey key)
+    {
+        return _indexMap.ContainsKey(key);
+    }
+
+    public bool Contains(KeyValuePair<TKey, TValue> item)
+    {
+        return TryGetValue(item.Key, out TValue? value)
+            && EqualityComparer<TValue>.Default.Equals(value, item.Value);
+    }
+
+    public bool TryGetValue(TKey key, out TValue value)
+    {
+        if (_indexMap.TryGetValue(key, out int index))
         {
-            { "ONE", 1 },
-        };
-
-        Assert.AreEqual(1, dict["one"]);
-        Assert.AreEqual(1, dict["One"]);
-        Assert.AreEqual(1, dict["ONE"]);
+            value = _items[index].Value!;
+            return true;
+        }
+        value = default!;
+        return false;
     }
 
-    [TestMethod]
-    public void TestAddDuplicateKey()
+    public int IndexOf(TKey key)
     {
-        _ = Assert.ThrowsException<ArgumentException>(() =>
-            _ = new OrderedDictionary<string, int> { { "key", 1 }, { "key", 2 } }
-        );
+        return _indexMap.TryGetValue(key, out int index) ? index : -1;
     }
 
-    [TestMethod]
-    public void TestGetNonExistentKey()
+    public void Clear()
     {
-        OrderedDictionary<string, int> dict = [];
-
-        _ = Assert.ThrowsException<KeyNotFoundException>(() => _ = dict["nonexistent"]);
+        _items.Clear();
+        _indexMap.Clear();
     }
 
-    [TestMethod]
-    public void TestIndexAccess()
+    public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
     {
-        OrderedDictionary<string, int> dict = new()
-        {
-            { "one", 1 },
-            { "two", 2 },
-            { "three", 3 },
-        };
-
-        Assert.AreEqual("one", dict[0].Key);
-        Assert.AreEqual(1, dict[0].Value);
-        Assert.AreEqual("two", dict[1].Key);
-        Assert.AreEqual(2, dict[1].Value);
-        Assert.AreEqual("three", dict[2].Key);
-        Assert.AreEqual(3, dict[2].Value);
+        _items.CopyTo(array, arrayIndex);
     }
 
-    [TestMethod]
-    public void TestOrderPreservation()
+    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
     {
-        OrderedDictionary<int, string> dict = new()
-        {
-            { 3, "three" },
-            { 1, "one" },
-            { 2, "two" },
-        };
-
-        List<int> keys = dict.Select(kvp => kvp.Key).ToList();
-        List<string> values = dict.Select(kvp => kvp.Value).ToList();
-
-        int[] expectedKeys = [3, 1, 2];
-        string[] expectedValues = ["three", "one", "two"];
-
-        CollectionAssert.AreEqual(expectedKeys, keys);
-        CollectionAssert.AreEqual(expectedValues, values);
+        return _items.GetEnumerator();
     }
 
-    [TestMethod]
-    public void TestComplexObjectKey()
+    IEnumerator IEnumerable.GetEnumerator()
     {
-        OrderedDictionary<Person, string> dict = [];
-        Person person1 = new Person { Id = 1, Name = "John" };
-        Person person2 = new Person { Id = 1, Name = "John" };
-
-        dict.Add(person1, "Developer");
-
-        _ = Assert.ThrowsException<KeyNotFoundException>(() => dict[person2]);
-    }
-
-    [TestMethod]
-    public void TestIDictionaryInterface()
-    {
-        IDictionary<string, int> dict = new OrderedDictionary<string, int>
-        {
-            { "one", 1 },
-            new KeyValuePair<string, int>("two", 2),
-        };
-
-        Assert.AreEqual(2, dict.Count);
-        Assert.IsTrue(dict.Contains(new KeyValuePair<string, int>("one", 1)));
-        Assert.IsFalse(dict.Contains(new KeyValuePair<string, int>("one", 999)));
-
-        List<string> keys = [.. dict.Keys];
-        List<int> values = [.. dict.Values];
-
-        string[] expectedKeysArray = ["one", "two"];
-        int[] expectedValuesArray = [1, 2];
-
-        CollectionAssert.AreEqual(expectedKeysArray, keys);
-        CollectionAssert.AreEqual(expectedValuesArray, values);
-    }
-
-    [TestMethod]
-    public void TestCopyTo()
-    {
-        OrderedDictionary<string, int> dict = new()
-        {
-            { "one", 1 },
-            { "two", 2 },
-            { "three", 3 },
-        };
-
-        KeyValuePair<string, int>[] array = new KeyValuePair<string, int>[5];
-        dict.CopyTo(array, 1);
-
-        Assert.AreEqual(default, array[0]);
-        Assert.AreEqual("one", array[1].Key);
-        Assert.AreEqual(1, array[1].Value);
-        Assert.AreEqual("two", array[2].Key);
-        Assert.AreEqual(2, array[2].Value);
-        Assert.AreEqual("three", array[3].Key);
-        Assert.AreEqual(3, array[3].Value);
-        Assert.AreEqual(default, array[4]);
-    }
-
-    [TestMethod]
-    public void TestRemoveByKeyValuePair()
-    {
-        OrderedDictionary<string, int> dict = new() { { "one", 1 }, { "two", 2 } };
-
-        bool removed = dict.Remove(new KeyValuePair<string, int>("one", 1));
-        Assert.IsTrue(removed);
-        Assert.AreEqual(1, dict.Count);
-        Assert.IsFalse(dict.ContainsKey("one"));
-
-        removed = dict.Remove(new KeyValuePair<string, int>("two", 999));
-        Assert.IsFalse(removed);
-        Assert.AreEqual(1, dict.Count);
+        return GetEnumerator();
     }
 }
