@@ -244,17 +244,17 @@ public class OrderedDictionaryTests
     public void TestIDictionaryInterface()
     {
         IDictionary<string, int> dict = new OrderedDictionary<string, int>
-    {
-        { "one", 1 },
-        new("two", 2),
-    };
+        {
+            { "one", 1 },
+            new("two", 2),
+        };
 
         Assert.AreEqual(2, dict.Count);
         Assert.IsTrue(dict.Contains(new KeyValuePair<string, int>("one", 1)));
         Assert.IsFalse(dict.Contains(new KeyValuePair<string, int>("one", 999)));
 
-        List<string> keys = new List<string>(dict.Keys);
-        List<int> values = new List<int>(dict.Values);
+        List<string> keys = [.. dict.Keys];
+        List<int> values = [.. dict.Values];
 
         string[] expectedKeysArray = ["one", "two"];
         int[] expectedValuesArray = [1, 2];
