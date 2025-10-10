@@ -10,7 +10,7 @@ public class AccountCollectionsTests
 
     public AccountCollectionsTests()
     {
-        _accountBalanceDict = new Dictionary<int, double>
+        _accountBalanceDict = new()
         {
             { 1001, 15000.75 },
             { 1002, 23450.25 },
@@ -19,8 +19,8 @@ public class AccountCollectionsTests
             { 1005, 32000.00 },
         };
 
-        _sortedAccountBalance = new SortedDictionary<int, double>(_accountBalanceDict);
-        _sortedAccountList = new SortedList<int, double>(_accountBalanceDict);
+        _sortedAccountBalance = new(_accountBalanceDict);
+        _sortedAccountList = new(_accountBalanceDict);
     }
 
     [TestMethod]
