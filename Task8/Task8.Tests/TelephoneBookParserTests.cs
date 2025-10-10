@@ -14,12 +14,7 @@ public class TelephoneBookParserTests
 
         IList<string> result = telephoneBookParser.ParseTelephoneNumbers(filePath);
 
-        IList<string> expected =
-        [
-            "+375259527099",
-            "+375259527088",
-            "+375339521077",
-        ];
+        IList<string> expected = ["+375259527099", "+375259527088", "+375339521077"];
         Assert.IsTrue(expected.SequenceEqual(result));
     }
 }
