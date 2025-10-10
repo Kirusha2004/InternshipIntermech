@@ -1,7 +1,8 @@
 namespace Task7;
+
 public class Receipt
 {
-    private IList<Product> _products = [];
+    private readonly IList<Product> _products = [];
     public int ProductCount => _products.Count;
 
     public void AddProduct(Product product)

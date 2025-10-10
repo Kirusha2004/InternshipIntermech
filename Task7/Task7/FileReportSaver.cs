@@ -8,10 +8,8 @@ public class FileReportSaver : IReportSaver
     {
         try
         {
-            using (StreamWriter writer = new StreamWriter(fileName, false, Encoding.UTF8))
-            {
-                writer.Write(content);
-            }
+            using StreamWriter writer = new StreamWriter(fileName, false, Encoding.UTF8);
+            writer.Write(content);
         }
         catch (Exception ex)
         {

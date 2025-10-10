@@ -9,27 +9,55 @@ public class FinancialReportGenerator : IReportGenerator
     {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.AppendLine("FINANCIAL REPORT");
-        stringBuilder.AppendLine("================\n");
+        _ = stringBuilder.AppendLine("FINANCIAL REPORT");
+        _ = stringBuilder.AppendLine("================\n");
 
-        stringBuilder.AppendLine($"Report Date: {DateTime.Now.ToString("MMMM dd, yyyy", CultureInfo.CurrentCulture)}");
-        stringBuilder.AppendLine($"Culture: {CultureInfo.CurrentCulture.Name} ({CultureInfo.CurrentCulture.EnglishName})");
-        stringBuilder.AppendLine();
+        _ = stringBuilder.AppendLine(
+            $"Report Date: {DateTime.Now.ToString("MMMM dd, yyyy", CultureInfo.CurrentCulture)}"
+        );
+        _ = stringBuilder.AppendLine(
+            $"Culture: {CultureInfo.CurrentCulture.Name} ({CultureInfo.CurrentCulture.EnglishName})"
+        );
+        _ = stringBuilder.AppendLine();
 
-        stringBuilder.AppendLine(string.Format("{0,-20} {1,-10} {2,-10} {3,-10}", "Product Name", "Price", "Quantity", "Total"));
-        stringBuilder.AppendLine(new string('-', 50));
+        _ = stringBuilder.AppendLine(
+            string.Format(
+                "{0,-20} {1,-10} {2,-10} {3,-10}",
+                "Product Name",
+                "Price",
+                "Quantity",
+                "Total"
+            )
+        );
+        _ = stringBuilder.AppendLine(new string('-', 50));
 
         decimal total = products.Sum(p => p.Price * p.Amount);
 
-        foreach (var product in products)
+        foreach (Product product in products)
         {
-            string productTotal = (product.Price * product.Amount).ToString("C", CultureInfo.CurrentCulture);
-            string priceFormatted = product.Price.ToString("C", CultureInfo.CurrentCulture);
-            stringBuilder.AppendLine(string.Format("{0,-20} {1,-10} {2,-10} {3,-10}", product.Name, priceFormatted, product.Amount, productTotal));
+            string productTotal = (product.Price * product.Amount).ToString(
+                "C",
+                CultureInfo.CurrentCulture
+            );
+            string priceFormatted = product.Price.ToString(
+                "C",
+                CultureInfo.CurrentCulture
+            );
+            _ = stringBuilder.AppendLine(
+                string.Format(
+                    "{0,-20} {1,-10} {2,-10} {3,-10}",
+                    product.Name,
+                    priceFormatted,
+                    product.Amount,
+                    productTotal
+                )
+            );
         }
 
-        stringBuilder.AppendLine(new string('-', 50));
-        stringBuilder.AppendLine($"Total: {total.ToString("C", CultureInfo.CurrentCulture)}");
+        _ = stringBuilder.AppendLine(new string('-', 50));
+        _ = stringBuilder.AppendLine(
+            $"Total: {total.ToString("C", CultureInfo.CurrentCulture)}"
+        );
 
         return stringBuilder.ToString();
     }

@@ -3,7 +3,7 @@ namespace Task7.Tests;
 [TestClass]
 public class FileReportSaverTests
 {
-    private string _testFileName = "test_report.txt";
+    private readonly string _testFileName = "test_report.txt";
 
     [TestCleanup]
     public void Cleanup()
@@ -17,7 +17,7 @@ public class FileReportSaverTests
     [TestMethod]
     public void TestSaveReportCreatesFile()
     {
-        var saver = new FileReportSaver();
+        FileReportSaver saver = new FileReportSaver();
         string testContent = "Test report content";
 
         saver.SaveReport(testContent, _testFileName);
@@ -28,7 +28,7 @@ public class FileReportSaverTests
     [TestMethod]
     public void TestSaveReportWritesCorrectContent()
     {
-        var saver = new FileReportSaver();
+        FileReportSaver saver = new FileReportSaver();
         string testContent = "Test report content with special chars: áéíóú";
 
         saver.SaveReport(testContent, _testFileName);
@@ -40,7 +40,7 @@ public class FileReportSaverTests
     [TestMethod]
     public void TestSaveReportOverwritesExistingFile()
     {
-        var saver = new FileReportSaver();
+        FileReportSaver saver = new FileReportSaver();
         string initialContent = "Initial content";
         string newContent = "New content";
 

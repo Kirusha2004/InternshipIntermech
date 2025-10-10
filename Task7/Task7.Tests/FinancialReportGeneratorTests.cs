@@ -6,12 +6,22 @@ public class FinancialReportGeneratorTests
     [TestMethod]
     public void TestGenerateReportWithProducts()
     {
-        var generator = new FinancialReportGenerator();
-        var products = new List<Product>
-        {
-            new Product { Name = "Apple", Price = 1.5m, Amount = 3 },
-            new Product { Name = "Bread", Price = 2.0m, Amount = 2 }
-        };
+        FinancialReportGenerator generator = new();
+        List<Product> products =
+        [
+            new Product
+            {
+                Name = "Apple",
+                Price = 1.5m,
+                Amount = 3,
+            },
+            new Product
+            {
+                Name = "Bread",
+                Price = 2.0m,
+                Amount = 2,
+            },
+        ];
 
         string report = generator.GenerateReport(products);
 
@@ -26,8 +36,8 @@ public class FinancialReportGeneratorTests
     [TestMethod]
     public void TestGenerateReportWithEmptyProducts()
     {
-        var generator = new FinancialReportGenerator();
-        var products = new List<Product>();
+        FinancialReportGenerator generator = new();
+        IList<Product> products = [];
 
         string report = generator.GenerateReport(products);
 
@@ -41,11 +51,16 @@ public class FinancialReportGeneratorTests
     [TestMethod]
     public void TestGenerateReportFormatting()
     {
-        var generator = new FinancialReportGenerator();
-        var products = new List<Product>
-        {
-            new Product { Name = "Test Product", Price = 10.99m, Amount = 1 }
-        };
+        FinancialReportGenerator generator = new FinancialReportGenerator();
+        IList<Product> products =
+        [
+            new Product
+            {
+                Name = "Test Product",
+                Price = 10.99m,
+                Amount = 1,
+            },
+        ];
 
         string report = generator.GenerateReport(products);
 
@@ -58,28 +73,46 @@ public class FinancialReportGeneratorTests
     [TestMethod]
     public void TestGenerateReportContainsCorrectCalculations()
     {
-        var generator = new FinancialReportGenerator();
-        var products = new List<Product>
-        {
-            new Product { Name = "Item1", Price = 10.0m, Amount = 2 },
-            new Product { Name = "Item2", Price = 15.5m, Amount = 3 }
-        };
+        FinancialReportGenerator generator = new FinancialReportGenerator();
+        IList<Product> products =
+        [
+            new Product
+            {
+                Name = "Item1",
+                Price = 10.0m,
+                Amount = 2,
+            },
+            new Product
+            {
+                Name = "Item2",
+                Price = 15.5m,
+                Amount = 3,
+            },
+        ];
         decimal expectedTotal = 66.50m;
 
         string report = generator.GenerateReport(products);
+        Assert.IsTrue(report.Contains(expectedTotal.ToString()));
 
-        var actualTotal = products.Sum(p => p.Price * p.Amount);
+
+        decimal actualTotal = products.Sum(p => p.Price * p.Amount);
         Assert.AreEqual(expectedTotal, actualTotal);
+        Assert.IsTrue(report.Contains("46.50"));
     }
 
     [TestMethod]
     public void TestGenerateReportStructure()
     {
-        var generator = new FinancialReportGenerator();
-        var products = new List<Product>
-        {
-            new Product { Name = "Test", Price = 1.0m, Amount = 1 }
-        };
+        FinancialReportGenerator generator = new FinancialReportGenerator();
+        IList<Product> products =
+        [
+            new Product
+            {
+                Name = "Test",
+                Price = 1.0m,
+                Amount = 1,
+            },
+        ];
 
         string report = generator.GenerateReport(products);
 
