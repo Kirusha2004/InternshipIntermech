@@ -6,31 +6,36 @@ namespace Task10.Tests;
 [TestClass]
 public class TemperatureConverterTests
 {
-    private AssemblyLoader? _assemblyLoader;
-    private TemperatureReflectionService? _reflectionService;
+    private AssemblyLoader _assemblyLoader;
+    private TemperatureReflectionService _reflectionService;
 
+    public TemperatureConverterTests()
+    {
+        _assemblyLoader = new AssemblyLoader();
+        _reflectionService = null!;
+    }
     [TestInitialize]
     public void TestInitialize()
     {
         _assemblyLoader = new AssemblyLoader();
-        Assembly? assembly = _assemblyLoader.LoadAssembly("Task10.dll");
+        Assembly assembly = _assemblyLoader.LoadAssembly("Task10.dll");
         _reflectionService = new TemperatureReflectionService(assembly);
     }
 
     [TestMethod]
     public void LoadAssemblyValidPathReturnsAssembly()
     {
-        Assembly? assembly = _assemblyLoader.LoadAssembly("Task10.dll");
+        Assembly assembly = _assemblyLoader.LoadAssembly("Task10.dll");
 
         Assert.IsNotNull(assembly);
         Assert.AreEqual("Task10", assembly.GetName().Name);
     }
 
     [TestMethod]
-    [ExpectedException(typeof(InvalidOperationException))]
     public void LoadAssemblyInvalidPathThrowsException()
     {
-        _assemblyLoader.LoadAssembly("NonExistent.dll");
+        _ = Assert.ThrowsException<InvalidOperationException>(() =>
+            _assemblyLoader.LoadAssembly("NonExistent.dll"));
     }
 
     [TestMethod]
@@ -68,7 +73,7 @@ public class TemperatureConverterTests
     [TestMethod]
     public void GetConverterTypeReturnsCorrectType()
     {
-        Type? type = _reflectionService.GetConverterType();
+        Type type = _reflectionService.GetConverterType();
 
         Assert.AreEqual("Task10.TemperatureConverter", type.FullName);
     }
@@ -76,7 +81,7 @@ public class TemperatureConverterTests
     [TestMethod]
     public void GetConversionMethodInfoReturnsCorrectMethod()
     {
-        MethodInfo? methodInfo = _reflectionService.GetConversionMethodInfo();
+        MethodInfo methodInfo = _reflectionService.GetConversionMethodInfo();
 
         Assert.IsNotNull(methodInfo);
         Assert.AreEqual("CelsiusToFahrenheit", methodInfo.Name);
@@ -85,11 +90,11 @@ public class TemperatureConverterTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(InvalidOperationException))]
     public void TemperatureReflectionServiceInvalidAssemblyThrowsException()
     {
-        Assembly? invalidAssembly = Assembly.GetExecutingAssembly();
+        Assembly invalidAssembly = Assembly.GetExecutingAssembly();
 
-        _ = new TemperatureReflectionService(invalidAssembly);
+        _ = Assert.ThrowsException<InvalidOperationException>(() =>
+            new TemperatureReflectionService(invalidAssembly));
     }
 }
