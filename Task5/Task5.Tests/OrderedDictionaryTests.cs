@@ -6,11 +6,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestAddAndGet()
     {
-        OrderedDictionary<string, int> dict = new()
-        {
-            { "one", 1 },
-            { "two", 2 },
-        };
+        OrderedDictionary<string, int> dict = new() { { "one", 1 }, { "two", 2 } };
 
         Assert.AreEqual(2, dict.Count);
         Assert.AreEqual(1, dict["one"]);
@@ -34,10 +30,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestIndexerUpdate()
     {
-        OrderedDictionary<string, int> dict = new()
-        {
-            ["key"] = 2,
-        };
+        OrderedDictionary<string, int> dict = new() { ["key"] = 2 };
 
         Assert.AreEqual(1, dict.Count);
         Assert.AreEqual(2, dict["key"]);
@@ -65,10 +58,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestRemoveNonExistent()
     {
-        OrderedDictionary<string, int> dict = new()
-        {
-            { "one", 1 },
-        };
+        OrderedDictionary<string, int> dict = new() { { "one", 1 } };
 
         bool removed = dict.Remove("two");
 
@@ -79,10 +69,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestContainsKey()
     {
-        OrderedDictionary<string, int> dict = new()
-        {
-            { "test", 123 },
-        };
+        OrderedDictionary<string, int> dict = new() { { "test", 123 } };
 
         Assert.IsTrue(dict.ContainsKey("test"));
         Assert.IsFalse(dict.ContainsKey("nonexistent"));
@@ -91,10 +78,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestTryGetValue()
     {
-        OrderedDictionary<string, int> dict = new()
-        {
-            { "exists", 42 },
-        };
+        OrderedDictionary<string, int> dict = new() { { "exists", 42 } };
 
         bool found = dict.TryGetValue("exists", out int value);
 
@@ -125,11 +109,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestClear()
     {
-        OrderedDictionary<string, int> dict = new()
-        {
-            { "one", 1 },
-            { "two", 2 },
-        };
+        OrderedDictionary<string, int> dict = new() { { "one", 1 }, { "two", 2 } };
 
         dict.Clear();
 
@@ -289,11 +269,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestRemoveByKeyValuePair()
     {
-        OrderedDictionary<string, int> dict = new()
-        {
-            { "one", 1 },
-            { "two", 2 },
-        };
+        OrderedDictionary<string, int> dict = new() { { "one", 1 }, { "two", 2 } };
 
         bool removed = dict.Remove(new KeyValuePair<string, int>("one", 1));
         Assert.IsTrue(removed);
