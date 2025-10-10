@@ -60,14 +60,16 @@ public class FileSettingsService
             string json = File.ReadAllText(_settingsPath);
             dynamic? settingsData = JsonConvert.DeserializeObject<dynamic>(json);
 
-            return new AppSettings
-            {
-                BackgroundColor = (Color)ColorConverter.ConvertFromString((string)settingsData.BackgroundColor),
-                TextColor = (Color)ColorConverter.ConvertFromString((string)settingsData.TextColor),
-                FontSize = (double)settingsData.FontSize,
-                FontStyle = (string)settingsData.FontStyle,
-                UseFileConfig = (bool)settingsData.UseFileConfig
-            };
+            return settingsData != null
+                ? new AppSettings
+                {
+                    BackgroundColor = (Color)ColorConverter.ConvertFromString((string)settingsData.BackgroundColor),
+                    TextColor = (Color)ColorConverter.ConvertFromString((string)settingsData.TextColor),
+                    FontSize = (double)settingsData.FontSize,
+                    FontStyle = (string)settingsData.FontStyle,
+                    UseFileConfig = (bool)settingsData.UseFileConfig
+                }
+                : new AppSettings();
         }
         catch (Exception ex)
         {

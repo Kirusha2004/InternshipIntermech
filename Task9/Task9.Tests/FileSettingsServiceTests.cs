@@ -6,7 +6,7 @@ namespace Task9.Tests;
 [TestClass]
 public class FileSettingsServiceTests
 {
-    private string _testSettingsPath;
+    private string _testSettingsPath = null!;
 
     [TestInitialize]
     public void TestInitialize()
