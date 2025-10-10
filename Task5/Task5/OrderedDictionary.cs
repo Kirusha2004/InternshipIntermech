@@ -15,7 +15,7 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         comparer ??= EqualityComparer<TKey>.Default;
         _items = [];
-        _indexMap = new Dictionary<TKey, int>(comparer);
+        _indexMap = new(comparer);
     }
 
     public int Count => _items.Count;
