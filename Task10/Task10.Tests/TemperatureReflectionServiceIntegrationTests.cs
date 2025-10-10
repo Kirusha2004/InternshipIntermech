@@ -1,6 +1,7 @@
 using ReflectionTaskExtentionProject;
 
 namespace Task10.Tests;
+
 [TestClass]
 public class TemperatureReflectionServiceIntegrationTests
 {
