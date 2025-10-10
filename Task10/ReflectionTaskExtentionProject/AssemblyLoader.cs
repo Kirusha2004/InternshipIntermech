@@ -8,8 +8,7 @@ public class AssemblyLoader
     {
         try
         {
-            AssemblyName assemblyName = AssemblyName.GetAssemblyName(assemblyPath);
-            return Assembly.Load(assemblyName);
+            return Assembly.LoadFrom(assemblyPath);
         }
         catch (FileNotFoundException e)
         {
