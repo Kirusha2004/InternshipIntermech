@@ -7,7 +7,7 @@ public class FinancialReportGeneratorTests
     public void TestGenerateReportWithProducts()
     {
         FinancialReportGenerator generator = new();
-        List<Product> products =
+        IList<Product> products =
         [
             new Product
             {

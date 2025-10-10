@@ -17,6 +17,6 @@ public class Receipt
 
     public IList<Product> GetProducts()
     {
-        return new List<Product>(_products);
+        return [.. _products];
     }
 }
