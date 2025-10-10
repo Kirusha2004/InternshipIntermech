@@ -117,10 +117,9 @@ public class AccountCollectionsTests
     [TestMethod]
     public void BalancesInEurosReturnsCorrectConversion()
     {
-        Dictionary<int, double> euros = _sortedAccountList.ToDictionary(
-            n => n.Key,
-            n => n.Value * 0.85
-        );
+        Dictionary<int, double> euros = new(_sortedAccountList.Select(
+            n => new KeyValuePair<int, double>(n.Key, n.Value * 0.85)
+        ));
 
         Assert.AreEqual(5, euros.Count);
         Assert.AreEqual(12750.6375, euros[1001], 0.001);
