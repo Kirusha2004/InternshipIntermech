@@ -5,16 +5,16 @@ namespace Task6.Tests;
 [TestClass]
 public class FileManagerTests
 {
-    private string _testFilePath;
+    private string _testFilePath = null!;
     private readonly string _testContent = "Hello, Test World!";
-    private IFileManager _fileManager;
-    private string _testDirectory;
+    private IFileManager _fileManager = null!;
+    private string _testDirectory = null!;
 
     [TestInitialize]
     public void TestInitialize()
     {
         _testDirectory = Path.Combine(Path.GetTempPath(), $"Test_{Guid.NewGuid()}");
-        Directory.CreateDirectory(_testDirectory);
+        _ = Directory.CreateDirectory(_testDirectory);
 
         _testFilePath = Path.Combine(_testDirectory, "test_file.txt");
         _fileManager = new FileManager();
@@ -32,18 +32,23 @@ public class FileManagerTests
     }
 
     [TestMethod]
-    public void ViewFile_WhenFileExists_ReturnsFileContent()
+    public void ViewFileWhenFileExistsReturnsFileContent()
     {
         string result = _fileManager.ViewFile(_testFilePath);
+
         Assert.AreEqual(_testContent, result);
     }
 
     [TestMethod]
-    [ExpectedException(typeof(FileNotFoundException))]
     public void ViewFileWhenFileNotExistsThrowsFileNotFoundException()
     {
-        string nonExistentFile = Path.Combine(_testDirectory, $"nonexistent_{Guid.NewGuid()}.txt");
-        _fileManager.ViewFile(nonExistentFile);
+        string nonExistentFile = Path.Combine(
+            _testDirectory,
+            $"nonexistent_{Guid.NewGuid()}.txt"
+        );
+
+        _ = Assert.ThrowsException<FileNotFoundException>(() =>
+            _fileManager.ViewFile(nonExistentFile));
     }
 
     [TestMethod]
@@ -51,8 +56,8 @@ public class FileManagerTests
     {
         string testFileName = $"test_find_{Guid.NewGuid()}.txt";
         string testFileFullPath = Path.Combine(_testDirectory, testFileName);
-
         File.WriteAllText(testFileFullPath, "test content", Encoding.UTF8);
+
         string foundPath = _fileManager.FindFile(testFileName, _testDirectory);
 
         Assert.IsNotNull(foundPath);
@@ -60,19 +65,24 @@ public class FileManagerTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(FileNotFoundException))]
     public void FindFileWhenFileNotExistsThrowsFileNotFoundException()
     {
         string nonExistentFile = $"nonexistent_{Guid.NewGuid()}.txt";
-        _fileManager.FindFile(nonExistentFile, _testDirectory);
+
+        _ = Assert.ThrowsException<FileNotFoundException>(() =>
+            _fileManager.FindFile(nonExistentFile, _testDirectory!));
     }
 
     [TestMethod]
-    [ExpectedException(typeof(DirectoryNotFoundException))]
     public void FindFileWhenDirectoryNotExistsThrowsDirectoryNotFoundException()
     {
-        string nonExistentDir = Path.Combine(_testDirectory, $"nonexistent_dir_{Guid.NewGuid()}");
-        _fileManager.FindFile("anyfile.txt", nonExistentDir);
+        string nonExistentDir = Path.Combine(
+            _testDirectory,
+            $"nonexistent_dir_{Guid.NewGuid()}"
+        );
+
+        _ = Assert.ThrowsException<DirectoryNotFoundException>(() =>
+            _fileManager.FindFile("anyfile.txt", nonExistentDir));
     }
 
     [TestMethod]
@@ -87,18 +97,27 @@ public class FileManagerTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(FileNotFoundException))]
-    public void CompressFileWhenFileNotExistsHrowsFileNotFoundException()
+    public void CompressFileWhenFileNotExistsThrowsFileNotFoundException()
     {
-        string nonExistentFile = Path.Combine(_testDirectory, $"nonexistent_{Guid.NewGuid()}.txt");
-        _fileManager.CompressFile(nonExistentFile);
+        string nonExistentFile = Path.Combine(
+            _testDirectory,
+            $"nonexistent_{Guid.NewGuid()}.txt"
+        );
+
+        _ = Assert.ThrowsException<FileNotFoundException>(() =>
+            _fileManager.CompressFile(nonExistentFile));
     }
 
     [TestMethod]
     public void CompressFileWithCustomTargetPathCreatesFileAtSpecifiedPath()
     {
-        string customTargetPath = Path.Combine(_testDirectory, $"compressed_{Guid.NewGuid()}.gz");
+        string customTargetPath = Path.Combine(
+            _testDirectory,
+            $"compressed_{Guid.NewGuid()}.gz"
+        );
+
         _fileManager.CompressFile(_testFilePath, customTargetPath);
+
         Assert.IsTrue(File.Exists(customTargetPath));
     }
 
@@ -106,11 +125,15 @@ public class FileManagerTests
     public void FindFileWithDefaultSearchPathUsesCrossPlatformDefault()
     {
         string testFileName = $"test_default_{Guid.NewGuid()}.txt";
-        string testFileFullPath = Path.Combine(Environment.CurrentDirectory, testFileName);
+        string testFileFullPath = Path.Combine(
+            Environment.CurrentDirectory,
+            testFileName
+        );
 
         try
         {
             File.WriteAllText(testFileFullPath, "test content", Encoding.UTF8);
+
             string foundPath = _fileManager.FindFile(testFileName);
 
             Assert.IsNotNull(foundPath);
@@ -119,7 +142,9 @@ public class FileManagerTests
         finally
         {
             if (File.Exists(testFileFullPath))
+            {
                 File.Delete(testFileFullPath);
+            }
         }
     }
 }
