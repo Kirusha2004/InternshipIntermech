@@ -1,21 +1,21 @@
 using System.Collections;
 
-
 namespace Task5;
 
 public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+    where TKey : notnull
 {
-    private readonly IList<KeyValuePair<TKey, TValue>> _items;
-    private readonly IDictionary<TKey, int> _indexMap;
-    private readonly IEqualityComparer<TKey> _comparer;
+    private readonly List<KeyValuePair<TKey, TValue>> _items;
+    private readonly Dictionary<TKey, int> _indexMap;
 
-    public OrderedDictionary() : this(new MyEqualityComparer<TKey>()) { }
+    public OrderedDictionary()
+        : this(EqualityComparer<TKey>.Default) { }
 
-    public OrderedDictionary(IEqualityComparer<TKey> comparer)
+    public OrderedDictionary(IEqualityComparer<TKey>? comparer)
     {
-        _comparer = comparer ?? new MyEqualityComparer<TKey>();
-        _items = new List<KeyValuePair<TKey, TValue>>();
-        _indexMap = new Dictionary<TKey, int>(_comparer);
+        comparer ??= EqualityComparer<TKey>.Default;
+        _items = [];
+        _indexMap = new Dictionary<TKey, int>(comparer);
     }
 
     public int Count => _items.Count;
@@ -23,17 +23,14 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 
     public TValue this[TKey key]
     {
-        get
-        {
-            if (_indexMap.TryGetValue(key, out int index))
-                return _items[index].Value;
-            throw new KeyNotFoundException($"Key '{key}' not found");
-        }
+        get =>
+            _indexMap.TryGetValue(key, out int index)
+                ? _items[index].Value
+                : throw new KeyNotFoundException($"Key '{key}' not found");
         set
         {
-            if (_indexMap.ContainsKey(key))
+            if (_indexMap.TryGetValue(key, out int index))
             {
-                int index = _indexMap[key];
                 _items[index] = new KeyValuePair<TKey, TValue>(key, value);
             }
             else
@@ -45,13 +42,25 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 
     public KeyValuePair<TKey, TValue> this[int index] => _items[index];
 
-    public ICollection<TKey> Keys => _items.Select(kvp => kvp.Key).ToList();
-    public ICollection<TValue> Values => _items.Select(kvp => kvp.Value).ToList();
+    public ICollection<TKey> Keys => GetKeys();
+    public ICollection<TValue> Values => GetValues();
+
+    private List<TKey> GetKeys()
+    {
+        return _items.Select(kvp => kvp.Key).ToList();
+    }
+
+    private List<TValue> GetValues()
+    {
+        return _items.Select(kvp => kvp.Value).ToList();
+    }
 
     public void Add(TKey key, TValue value)
     {
         if (_indexMap.ContainsKey(key))
+        {
             throw new ArgumentException($"Key '{key}' already exists");
+        }
 
         _items.Add(new KeyValuePair<TKey, TValue>(key, value));
         _indexMap[key] = _items.Count - 1;
@@ -65,10 +74,12 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     public bool Remove(TKey key)
     {
         if (!_indexMap.TryGetValue(key, out int index))
+        {
             return false;
+        }
 
         _items.RemoveAt(index);
-        _indexMap.Remove(key);
+        _ = _indexMap.Remove(key);
 
         for (int i = index; i < _items.Count; i++)
         {
@@ -80,12 +91,9 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 
     public bool Remove(KeyValuePair<TKey, TValue> item)
     {
-        if (TryGetValue(item.Key, out TValue value) &&
-            EqualityComparer<TValue>.Default.Equals(value, item.Value))
-        {
-            return Remove(item.Key);
-        }
-        return false;
+        return TryGetValue(item.Key, out TValue? value)
+            && EqualityComparer<TValue>.Default.Equals(value, item.Value)
+            && Remove(item.Key);
     }
 
     public bool ContainsKey(TKey key)
@@ -95,18 +103,18 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 
     public bool Contains(KeyValuePair<TKey, TValue> item)
     {
-        return TryGetValue(item.Key, out TValue value) &&
-               EqualityComparer<TValue>.Default.Equals(value, item.Value);
+        return TryGetValue(item.Key, out TValue? value)
+            && EqualityComparer<TValue>.Default.Equals(value, item.Value);
     }
 
     public bool TryGetValue(TKey key, out TValue value)
     {
         if (_indexMap.TryGetValue(key, out int index))
         {
-            value = _items[index].Value;
+            value = _items[index].Value!;
             return true;
         }
-        value = default;
+        value = default!;
         return false;
     }
 
