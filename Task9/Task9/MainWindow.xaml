@@ -1,0 +1,86 @@
+<Window x:Class="Task9.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="Main Window" Height="450" Width="800"
+        Name="MainWin">
+
+    <TabControl>
+        <TabItem Header="Главная">
+            <ScrollViewer>
+                <TextBlock Name="MainTextBlock" 
+                          Text="Это пример текста для демонстрации настроек. Можно изменить цвет фона, цвет текста, размер и стиль шрифта."
+                          TextWrapping="Wrap" 
+                          Margin="20"
+                          FontSize="16"/>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="Настройки">
+            <ScrollViewer>
+                <StackPanel Margin="20" Width="300">
+                    <GroupBox Header="Цветовые настройки">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Цвет фона:" Margin="0,5"/>
+                            <xctk:ColorPicker Name="BgColorPicker"
+                                             ShowStandardColors="True"
+                                             ShowAvailableColors="True"
+                                             Margin="0,5"/>
+
+                            <TextBlock Text="Цвет текста:" Margin="0,15,0,5"/>
+                            <xctk:ColorPicker Name="TextColorPicker"
+                                             ShowStandardColors="True"
+                                             ShowAvailableColors="True"
+                                             Margin="0,5"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Настройки шрифта" Margin="0,20,0,0">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Размер шрифта:" Margin="0,5"/>
+                            <ComboBox Name="FontSizeComboBox" 
+                                     Margin="0,5"
+                                     SelectedValuePath="Content">
+                                <ComboBoxItem>12</ComboBoxItem>
+                                <ComboBoxItem>14</ComboBoxItem>
+                                <ComboBoxItem>16</ComboBoxItem>
+                                <ComboBoxItem>18</ComboBoxItem>
+                                <ComboBoxItem>20</ComboBoxItem>
+                                <ComboBoxItem>24</ComboBoxItem>
+                            </ComboBox>
+
+                            <TextBlock Text="Стиль шрифта:" Margin="0,15,0,5"/>
+                            <ComboBox Name="FontStyleComboBox" 
+                                     Margin="0,5"
+                                     SelectedValuePath="Content">
+                                <ComboBoxItem>Normal</ComboBoxItem>
+                                <ComboBoxItem>Italic</ComboBoxItem>
+                                <ComboBoxItem>Oblique</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Способ сохранения" Margin="0,20,0,0">
+                        <StackPanel Margin="10">
+                            <RadioButton Name="FileConfigRadio" 
+                                        Content="Сохранять в файл" 
+                                        IsChecked="True"
+                                        Margin="0,5"/>
+                            <RadioButton Name="RegistryConfigRadio" 
+                                        Content="Сохранять в реестр"
+                                        Margin="0,5"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <Button Name="SaveButton" 
+                           Content="Сохранить настройки" 
+                           Click="SaveButton_Click"
+                           Margin="0,20,0,0"
+                           Height="30"
+                           Background="#FF008000"
+                           Foreground="White"/>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+    </TabControl>
+</Window>
