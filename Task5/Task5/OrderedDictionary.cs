@@ -13,7 +13,7 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 
     public OrderedDictionary(IEqualityComparer<TKey> comparer)
     {
-        _items = new List<KeyValuePair<TKey, TValue>>();
+        _items = [];
         _indexMap = new Dictionary<TKey, int>(comparer);
     }
 
