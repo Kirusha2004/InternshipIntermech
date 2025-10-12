@@ -5,17 +5,16 @@ namespace Task5;
 public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     where TKey : notnull
 {
-    private readonly List<KeyValuePair<TKey, TValue>> _items;
-    private readonly Dictionary<TKey, int> _indexMap;
+    private readonly IList<KeyValuePair<TKey, TValue>> _items;
+    private readonly IDictionary<TKey, int> _indexMap;
 
     public OrderedDictionary()
         : this(EqualityComparer<TKey>.Default) { }
 
-    public OrderedDictionary(IEqualityComparer<TKey>? comparer)
+    public OrderedDictionary(IEqualityComparer<TKey> comparer)
     {
-        comparer ??= EqualityComparer<TKey>.Default;
-        _items = [];
-        _indexMap = new(comparer);
+        _items = new List<KeyValuePair<TKey, TValue>>();
+        _indexMap = new Dictionary<TKey, int>(comparer);
     }
 
     public int Count => _items.Count;
@@ -42,18 +41,8 @@ public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 
     public KeyValuePair<TKey, TValue> this[int index] => _items[index];
 
-    public ICollection<TKey> Keys => GetKeys();
-    public ICollection<TValue> Values => GetValues();
-
-    private List<TKey> GetKeys()
-    {
-        return [.. _items.Select(kvp => kvp.Key)];
-    }
-
-    private List<TValue> GetValues()
-    {
-        return [.. _items.Select(kvp => kvp.Value)];
-    }
+    public ICollection<TKey> Keys => [.. _items.Select(kvp => kvp.Key)];
+    public ICollection<TValue> Values => [.. _items.Select(kvp => kvp.Value)];
 
     public void Add(TKey key, TValue value)
     {

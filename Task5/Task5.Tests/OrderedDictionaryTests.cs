@@ -1,3 +1,4 @@
+// Task5.Tests/OrderedDictionaryTests.cs
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Task5.Tests;
@@ -32,7 +33,8 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestIndexerUpdate()
     {
-        OrderedDictionary<string, int> dict = new() { ["key"] = 2 };
+        OrderedDictionary<string, int> dict = new() { ["key"] = 1 };
+        dict["key"] = 2;
 
         Assert.AreEqual(1, dict.Count);
         Assert.AreEqual(2, dict["key"]);
@@ -144,7 +146,7 @@ public class OrderedDictionaryTests
     [TestMethod]
     public void TestCustomComparer()
     {
-        OrderedDictionary<string, int> dict = new(new MyEqualityComparer<string>())
+        OrderedDictionary<string, int> dict = new(new CaseInsensitiveStringComparer())
         {
             { "ONE", 1 },
         };
@@ -213,11 +215,16 @@ public class OrderedDictionaryTests
     {
         OrderedDictionary<Person, string> dict = [];
         Person person1 = new() { Id = 1, Name = "John" };
-        Person person2 = new() { Id = 1, Name = "John" };
+        Person person2 = new() { Id = 2, Name = "Jane" };
 
         dict.Add(person1, "Developer");
+        dict.Add(person2, "Manager");
 
-        _ = Assert.ThrowsException<KeyNotFoundException>(() => dict[person2]);
+        Assert.AreEqual(2, dict.Count);
+        Assert.AreEqual("Developer", dict[person1]);
+        Assert.AreEqual("Manager", dict[person2]);
+        Assert.IsTrue(dict.ContainsKey(person1));
+        Assert.IsFalse(dict.ContainsKey(new Person { Id = 3, Name = "Bob" }));
     }
 
     [TestMethod]
@@ -279,5 +286,17 @@ public class OrderedDictionaryTests
         removed = dict.Remove(new KeyValuePair<string, int>("two", 999));
         Assert.IsFalse(removed);
         Assert.AreEqual(1, dict.Count);
+    }
+
+    [TestMethod]
+    public void TestBuiltInStringComparer()
+    {
+        OrderedDictionary<string, int> dict = new(StringComparer.OrdinalIgnoreCase)
+        {
+            { "TEST", 100 },
+        };
+
+        Assert.AreEqual(100, dict["test"]);
+        Assert.AreEqual(100, dict["Test"]);
     }
 }
