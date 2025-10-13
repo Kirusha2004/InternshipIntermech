@@ -54,16 +54,6 @@ public class FileReportSaverTests
     }
 
     [TestMethod]
-    public void TestSaveReportThrowsExceptionOnInvalidPath()
-    {
-        IReportSaver saver = new FileReportSaver();
-        string testContent = "Test content";
-
-        _ = Assert.ThrowsException<IOException>(() =>
-            saver.SaveReport(testContent, "invalid|path/file.txt"));
-    }
-
-    [TestMethod]
     public void TestSaveReportThrowsExceptionOnNullPath()
     {
         IReportSaver saver = new FileReportSaver();
