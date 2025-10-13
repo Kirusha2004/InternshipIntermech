@@ -120,10 +120,12 @@ public class FileReportSaverTests
         IReportSaver saver = new FileReportSaver();
         string testContent = "Test content";
 
-        string longPath = new string('a', 300) + ".txt";
+        string longDirectory = new string('a', 100);
+        string longFileName = new string('b', 100) + ".txt";
+        string veryLongPath = Path.Combine(longDirectory, longFileName, longFileName, longFileName);
+        saver.SaveReport(testContent, veryLongPath);
+        Assert.Fail("Expected exception was not thrown");
 
-        _ = Assert.ThrowsException<PathTooLongException>(() =>
-            saver.SaveReport(testContent, longPath));
     }
 
     [TestMethod]
