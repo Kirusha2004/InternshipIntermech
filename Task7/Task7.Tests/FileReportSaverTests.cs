@@ -59,7 +59,7 @@ public class FileReportSaverTests
         IReportSaver saver = new FileReportSaver();
         string testContent = "Test content";
 
-        _ = Assert.ThrowsException<ArgumentException>(() =>
+        _ = Assert.ThrowsException<IOException>(() =>
             saver.SaveReport(testContent, "invalid|path/file.txt"));
     }
 
