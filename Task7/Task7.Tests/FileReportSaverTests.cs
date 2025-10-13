@@ -17,7 +17,7 @@ public class FileReportSaverTests
     [TestMethod]
     public void TestSaveReportCreatesFile()
     {
-        FileReportSaver saver = new FileReportSaver();
+        IReportSaver saver = new FileReportSaver();
         string testContent = "Test report content";
 
         saver.SaveReport(testContent, _testFileName);
@@ -28,7 +28,7 @@ public class FileReportSaverTests
     [TestMethod]
     public void TestSaveReportWritesCorrectContent()
     {
-        FileReportSaver saver = new FileReportSaver();
+        IReportSaver saver = new FileReportSaver();
         string testContent = "Test report content with special chars: áéíóú";
 
         saver.SaveReport(testContent, _testFileName);
@@ -40,7 +40,7 @@ public class FileReportSaverTests
     [TestMethod]
     public void TestSaveReportOverwritesExistingFile()
     {
-        FileReportSaver saver = new FileReportSaver();
+        IReportSaver saver = new FileReportSaver();
         string initialContent = "Initial content";
         string newContent = "New content";
 
@@ -51,5 +51,45 @@ public class FileReportSaverTests
         string fileContent = File.ReadAllText(_testFileName);
         Assert.AreEqual(newContent, fileContent);
         Assert.AreNotEqual(initialContent, fileContent);
+    }
+
+    [TestMethod]
+    public void TestSaveReportThrowsExceptionOnInvalidPath()
+    {
+        IReportSaver saver = new FileReportSaver();
+        string testContent = "Test content";
+
+        _ = Assert.ThrowsException<ArgumentException>(() =>
+            saver.SaveReport(testContent, "invalid|path/file.txt"));
+    }
+
+    [TestMethod]
+    public void TestSaveReportThrowsExceptionOnNonExistentDirectory()
+    {
+        IReportSaver saver = new FileReportSaver();
+        string testContent = "Test content";
+
+        _ = Assert.ThrowsException<DirectoryNotFoundException>(() =>
+            saver.SaveReport(testContent, @"C:\NonExistentDirectory\test.txt"));
+    }
+
+    [TestMethod]
+    public void TestSaveReportThrowsExceptionOnReadOnlyFile()
+    {
+        IReportSaver saver = new FileReportSaver();
+        string testContent = "Test content";
+
+        File.WriteAllText(_testFileName, "initial");
+        File.SetAttributes(_testFileName, FileAttributes.ReadOnly);
+
+        try
+        {
+            _ = Assert.ThrowsException<UnauthorizedAccessException>(() =>
+                saver.SaveReport(testContent, _testFileName));
+        }
+        finally
+        {
+            File.SetAttributes(_testFileName, FileAttributes.Normal);
+        }
     }
 }
