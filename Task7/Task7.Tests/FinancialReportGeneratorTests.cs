@@ -7,11 +7,11 @@ public class FinancialReportGeneratorTests
     public void TestGenerateReportWithProducts()
     {
         IReportGenerator generator = new FinancialReportGenerator();
-        IEnumerable<Product> products = new[]
-        {
+        IEnumerable<Product> products =
+        [
             new Product("Apple", 1.5m, 3),
             new Product("Bread", 2.0m, 2)
-        };
+        ];
 
         string report = generator.GenerateReport(products);
 
@@ -27,7 +27,7 @@ public class FinancialReportGeneratorTests
     public void TestGenerateReportWithEmptyProducts()
     {
         IReportGenerator generator = new FinancialReportGenerator();
-        IEnumerable<Product> products = new List<Product>();
+        IEnumerable<Product> products = [];
 
         string report = generator.GenerateReport(products);
 
@@ -41,10 +41,10 @@ public class FinancialReportGeneratorTests
     public void TestGenerateReportFormatting()
     {
         IReportGenerator generator = new FinancialReportGenerator();
-        IEnumerable<Product> products = new[]
-        {
+        IEnumerable<Product> products =
+        [
             new Product("Test Product", 10.99m, 1)
-        };
+        ];
 
         string report = generator.GenerateReport(products);
 
@@ -59,11 +59,11 @@ public class FinancialReportGeneratorTests
     public void TestGenerateReportContainsCorrectCalculations()
     {
         IReportGenerator generator = new FinancialReportGenerator();
-        IEnumerable<Product> products = new[]
-        {
+        IEnumerable<Product> products =
+        [
             new Product("Item1", 10.0m, 2),
             new Product("Item2", 15.5m, 3)
-        };
+        ];
 
         decimal expectedTotal = 66.50m;
         string report = generator.GenerateReport(products);
@@ -78,10 +78,10 @@ public class FinancialReportGeneratorTests
     public void TestGenerateReportStructure()
     {
         IReportGenerator generator = new FinancialReportGenerator();
-        IEnumerable<Product> products = new[]
-        {
+        IEnumerable<Product> products =
+        [
             new Product("Test", 1.0m, 1)
-        };
+        ];
 
         string report = generator.GenerateReport(products);
 
@@ -99,26 +99,26 @@ public class FinancialReportGeneratorTests
     public void TestGenerateReportUsesStringJoin()
     {
         IReportGenerator generator = new FinancialReportGenerator();
-        IEnumerable<Product> products = new[]
-        {
+        IEnumerable<Product> products =
+        [
             new Product("Test", 1.0m, 1)
-        };
+        ];
 
         string report = generator.GenerateReport(products);
 
         Assert.IsTrue(report.Contains(Environment.NewLine));
-        Assert.IsTrue(report.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length > 10);
+        Assert.IsTrue(report.Split([Environment.NewLine], StringSplitOptions.None).Length > 10);
     }
 
     [TestMethod]
     public void TestGenerateReportWithSpecialCharacters()
     {
         IReportGenerator generator = new FinancialReportGenerator();
-        IEnumerable<Product> products = new[]
-        {
+        IEnumerable<Product> products =
+        [
             new Product("Café", 25.75m, 2),
             new Product("München Beer", 15.99m, 1)
-        };
+        ];
 
         string report = generator.GenerateReport(products);
 
