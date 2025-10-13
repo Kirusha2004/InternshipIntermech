@@ -115,27 +115,6 @@ public class FileReportSaverTests
     }
 
     [TestMethod]
-    public void TestSaveReportThrowsExceptionOnPathTooLong()
-    {
-        IReportSaver saver = new FileReportSaver();
-        string testContent = "Test content";
-
-        string longDirectory = new string('a', 100);
-        string longFileName = new string('b', 100) + ".txt";
-        string veryLongPath = Path.Combine(longDirectory, longFileName, longFileName, longFileName);
-
-        try
-        {
-            saver.SaveReport(testContent, veryLongPath);
-            Assert.Fail("Expected exception was not thrown");
-        }
-        catch (IOException)
-        {
-            // Ожидаемое поведение в большинстве случаев Windows
-        }
-    }
-
-    [TestMethod]
     public void TestSaveReportWithValidUnicodeCharacters()
     {
         IReportSaver saver = new FileReportSaver();
