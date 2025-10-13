@@ -64,13 +64,34 @@ public class FileReportSaverTests
     }
 
     [TestMethod]
+    public void TestSaveReportThrowsExceptionOnNullPath()
+    {
+        IReportSaver saver = new FileReportSaver();
+        string testContent = "Test content";
+
+        _ = Assert.ThrowsException<ArgumentNullException>(() =>
+            saver.SaveReport(testContent, null!));
+    }
+
+    [TestMethod]
+    public void TestSaveReportThrowsExceptionOnEmptyPath()
+    {
+        IReportSaver saver = new FileReportSaver();
+        string testContent = "Test content";
+
+        _ = Assert.ThrowsException<ArgumentException>(() =>
+            saver.SaveReport(testContent, ""));
+    }
+
+    [TestMethod]
     public void TestSaveReportThrowsExceptionOnNonExistentDirectory()
     {
         IReportSaver saver = new FileReportSaver();
         string testContent = "Test content";
 
+        string nonExistentPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "test.txt");
         _ = Assert.ThrowsException<DirectoryNotFoundException>(() =>
-            saver.SaveReport(testContent, @"C:\NonExistentDirectory\test.txt"));
+            saver.SaveReport(testContent, nonExistentPath));
     }
 
     [TestMethod]
@@ -90,6 +111,42 @@ public class FileReportSaverTests
         finally
         {
             File.SetAttributes(_testFileName, FileAttributes.Normal);
+        }
+    }
+
+    [TestMethod]
+    public void TestSaveReportThrowsExceptionOnPathTooLong()
+    {
+        IReportSaver saver = new FileReportSaver();
+        string testContent = "Test content";
+
+        string longPath = new string('a', 300) + ".txt";
+
+        _ = Assert.ThrowsException<PathTooLongException>(() =>
+            saver.SaveReport(testContent, longPath));
+    }
+
+    [TestMethod]
+    public void TestSaveReportWithValidUnicodeCharacters()
+    {
+        IReportSaver saver = new FileReportSaver();
+        string testContent = "Test content with Unicode: 🚀✨";
+        string unicodeFileName = "test_🚀_report.txt";
+
+        try
+        {
+            saver.SaveReport(testContent, unicodeFileName);
+            Assert.IsTrue(File.Exists(unicodeFileName));
+
+            string fileContent = File.ReadAllText(unicodeFileName);
+            Assert.AreEqual(testContent, fileContent);
+        }
+        finally
+        {
+            if (File.Exists(unicodeFileName))
+            {
+                File.Delete(unicodeFileName);
+            }
         }
     }
 }
