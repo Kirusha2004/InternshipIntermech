@@ -4,7 +4,7 @@ namespace Task8;
 
 public class TelephoneBookParser
 {
-    public IList<string> ParseTelephoneNumbers(string filePath)
+    public IEnumerable<string> ParseTelephoneNumbers(string filePath)
     {
         XDocument xDoc = XDocument.Load(filePath);
 
