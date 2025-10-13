@@ -123,9 +123,16 @@ public class FileReportSaverTests
         string longDirectory = new string('a', 100);
         string longFileName = new string('b', 100) + ".txt";
         string veryLongPath = Path.Combine(longDirectory, longFileName, longFileName, longFileName);
-        saver.SaveReport(testContent, veryLongPath);
-        Assert.Fail("Expected exception was not thrown");
 
+        try
+        {
+            saver.SaveReport(testContent, veryLongPath);
+            Assert.Fail("Expected exception was not thrown");
+        }
+        catch (IOException)
+        {
+            // Ожидаемое поведение в большинстве случаев Windows
+        }
     }
 
     [TestMethod]
