@@ -2,6 +2,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using Newtonsoft.Json;
+
 namespace Task9;
 
 public class FileSettingsService
@@ -30,14 +31,13 @@ public class FileSettingsService
     {
         try
         {
-            var settingsData = new
-            {
-                BackgroundColor = settings.BackgroundColor.ToString(),
-                TextColor = settings.TextColor.ToString(),
-                settings.FontSize,
-                settings.FontStyle,
-                settings.UseFileConfig
-            };
+            SettingsData settingsData = new SettingsData(
+                backgroundColor: settings.BackgroundColor.ToString(),
+                textColor: settings.TextColor.ToString(),
+                fontSize: settings.FontSize,
+                fontStyle: settings.FontStyle,
+                useFileConfig: settings.UseFileConfig
+            );
 
             string json = JsonConvert.SerializeObject(settingsData, Formatting.Indented);
             File.WriteAllText(_settingsPath, json);
@@ -58,16 +58,16 @@ public class FileSettingsService
             }
 
             string json = File.ReadAllText(_settingsPath);
-            dynamic? settingsData = JsonConvert.DeserializeObject<dynamic>(json);
+            SettingsData? settingsData = JsonConvert.DeserializeObject<SettingsData>(json);
 
             return settingsData != null
                 ? new AppSettings
                 {
-                    BackgroundColor = (Color)ColorConverter.ConvertFromString((string)settingsData.BackgroundColor),
-                    TextColor = (Color)ColorConverter.ConvertFromString((string)settingsData.TextColor),
-                    FontSize = (double)settingsData.FontSize,
-                    FontStyle = (string)settingsData.FontStyle,
-                    UseFileConfig = (bool)settingsData.UseFileConfig
+                    BackgroundColor = (Color)ColorConverter.ConvertFromString(settingsData.BackgroundColor),
+                    TextColor = (Color)ColorConverter.ConvertFromString(settingsData.TextColor),
+                    FontSize = settingsData.FontSize,
+                    FontStyle = settingsData.FontStyle,
+                    UseFileConfig = settingsData.UseFileConfig
                 }
                 : new AppSettings();
         }

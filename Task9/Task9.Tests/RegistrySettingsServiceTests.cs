@@ -22,12 +22,10 @@ public class RegistrySettingsServiceTests
 
     private void CleanTestRegistry()
     {
-        using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(_testRegistryPath))
+        using RegistryKey? key = Registry.CurrentUser.OpenSubKey(_testRegistryPath);
+        if (key != null)
         {
-            if (key != null)
-            {
-                Registry.CurrentUser.DeleteSubKeyTree(_testRegistryPath);
-            }
+            Registry.CurrentUser.DeleteSubKeyTree(_testRegistryPath);
         }
     }
 
