@@ -4,17 +4,17 @@ namespace Task8.Tests;
 public class TelephoneBookParserTests
 {
     [TestMethod]
-    public void ParseTelephoneNumbersValidFileReturnsExpectedNumbers()
+    public void TelephoneBookValidFileReturnsExpectedNumbers()
     {
         string filePath = Path.Combine(
             Directory.GetCurrentDirectory(),
             "TelephoneBook.xml"
         );
-        TelephoneBookParser telephoneBookParser = new TelephoneBookParser();
+        TelephoneBookParser telephoneBook = new(filePath);
 
-        IEnumerable<string> result = telephoneBookParser.ParseTelephoneNumbers(filePath);
+        List<string> result = [.. telephoneBook];
+        List<string> expected = ["+375259527099", "+375259527088", "+375339521077"];
 
-        IList<string> expected = ["+375259527099", "+375259527088", "+375339521077"];
-        Assert.IsTrue(expected.SequenceEqual(result));
+        CollectionAssert.AreEqual(expected, result);
     }
 }
