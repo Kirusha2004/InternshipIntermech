@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task11", "Task11\Task11.csproj", "{356CB4C3-13DC-498A-A516-B9B9B3E64596}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task11.Tests", "Task11.Tests\Task11.Tests.csproj", "{256CA9EB-AC33-4B5E-8209-0A91D4F17D83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Новая папка1", "Новая папка1", "{66DB912A-36DB-4CAE-8FF4-55359015E48A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{356CB4C3-13DC-498A-A516-B9B9B3E64596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{356CB4C3-13DC-498A-A516-B9B9B3E64596}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{356CB4C3-13DC-498A-A516-B9B9B3E64596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{356CB4C3-13DC-498A-A516-B9B9B3E64596}.Release|Any CPU.Build.0 = Release|Any CPU
+		{256CA9EB-AC33-4B5E-8209-0A91D4F17D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{256CA9EB-AC33-4B5E-8209-0A91D4F17D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{256CA9EB-AC33-4B5E-8209-0A91D4F17D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{256CA9EB-AC33-4B5E-8209-0A91D4F17D83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{256CA9EB-AC33-4B5E-8209-0A91D4F17D83} = {66DB912A-36DB-4CAE-8FF4-55359015E48A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {87C94225-5849-4260-8309-365C05C2D328}
+	EndGlobalSection
+EndGlobal

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Reflection;
 
 namespace Task11;
@@ -16,44 +15,44 @@ public class TypeReflector
 
     public string GetReflectionInfo()
     {
-        IList info = new List<string>
-        {
+        List<string> info =
+        [
             $"Тип: {_type.Name}"
-        };
+        ];
         object[] typeAttrs = _type.GetCustomAttributes(false);
         if (typeAttrs.Length > 0)
         {
-            _ = info.Add("Атрибуты типа:");
+            info.Add("Атрибуты типа:");
             foreach (object attr in typeAttrs)
             {
-                _ = info.Add($"- {attr.GetType().Name}");
+                info.Add($"- {attr.GetType().Name}");
             }
         }
 
         if (_memberTypes.HasFlag(MemberTypesToShow.Methods))
         {
-            _ = info.Add("Методы:");
+            info.Add("Методы:");
             foreach (MethodInfo method in _type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
             {
-                _ = info.Add($"- {method.Name}");
+                info.Add($"- {method.Name}");
                 object[] methodAttrs = method.GetCustomAttributes(false);
                 foreach (object attr in methodAttrs)
                 {
-                    _ = info.Add($"  Атрибут: {attr.GetType().Name}");
+                    info.Add($"  Атрибут: {attr.GetType().Name}");
                 }
             }
         }
 
         if (_memberTypes.HasFlag(MemberTypesToShow.Properties))
         {
-            _ = info.Add("Свойства:");
+            info.Add("Свойства:");
             foreach (PropertyInfo prop in _type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
             {
-                _ = info.Add($"- {prop.Name} ({prop.PropertyType.Name})");
+                info.Add($"- {prop.Name} ({prop.PropertyType.Name})");
                 object[] propAttrs = prop.GetCustomAttributes(false);
                 foreach (object attr in propAttrs)
                 {
-                    _ = info.Add($"  Атрибут: {attr.GetType().Name}");
+                    info.Add($"  Атрибут: {attr.GetType().Name}");
                 }
             }
         }
