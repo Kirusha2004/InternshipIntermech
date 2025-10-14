@@ -12,7 +12,7 @@ public class TelephoneBookParserTests
         );
         TelephoneBookParser telephoneBookParser = new TelephoneBookParser();
 
-        IList<string> result = telephoneBookParser.ParseTelephoneNumbers(filePath);
+        IEnumerable<string> result = telephoneBookParser.ParseTelephoneNumbers(filePath);
 
         IList<string> expected = ["+375259527099", "+375259527088", "+375339521077"];
         Assert.IsTrue(expected.SequenceEqual(result));
