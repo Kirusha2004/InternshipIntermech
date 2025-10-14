@@ -4,25 +4,15 @@ namespace ReflectionTaskExtentionProject;
 
 public class TemperatureReflectionService
 {
-    private readonly object _converterInstance;
+    private readonly Type _converterType;
     private readonly MethodInfo _conversionMethod;
 
     public TemperatureReflectionService(Assembly assembly)
     {
-        Type? type =
-            assembly.GetType("Task10.TemperatureConverter")
-            ?? throw new InvalidOperationException(
-                "Класс Task10.TemperatureConverter не найден в сборке"
-            );
+        _converterType = assembly.GetType("Task10.TemperatureConverter")
+            ?? throw new InvalidOperationException("Класс Task10.TemperatureConverter не найден в сборке");
 
-        _converterInstance =
-            Activator.CreateInstance(type)
-            ?? throw new InvalidOperationException(
-                "Не удалось создать экземпляр TemperatureConverter"
-            );
-
-        _conversionMethod =
-            type.GetMethod("CelsiusToFahrenheit")
+        _conversionMethod = _converterType.GetMethod("CelsiusToFahrenheit")
             ?? throw new InvalidOperationException("Метод CelsiusToFahrenheit не найден");
     }
 
@@ -30,9 +20,13 @@ public class TemperatureReflectionService
     {
         try
         {
-            object[] parameters = [celsius];
-            object? result = _conversionMethod.Invoke(_converterInstance, parameters);
-            return result == null ? throw new InvalidOperationException("Метод конвертации вернул null") : (double)result;
+            object converterInstance = Activator.CreateInstance(_converterType, new object[] { celsius })
+                ?? throw new InvalidOperationException("Не удалось создать экземпляр TemperatureConverter");
+
+            object? result = _conversionMethod.Invoke(converterInstance, null);
+            return result == null
+                ? throw new InvalidOperationException("Метод конвертации вернул null")
+                : (double)result;
         }
         catch (Exception e)
         {
@@ -50,6 +44,6 @@ public class TemperatureReflectionService
 
     public Type GetConverterType()
     {
-        return _converterInstance.GetType();
+        return _converterType;
     }
 }

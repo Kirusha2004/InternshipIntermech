@@ -22,7 +22,9 @@ public class AssemblyLoader
             }
 
             Console.WriteLine($"Загружаем сборку из: {assemblyPath}");
-            return Assembly.LoadFrom(assemblyPath);
+
+            byte[] assemblyBytes = File.ReadAllBytes(assemblyPath);
+            return Assembly.Load(assemblyBytes);
         }
         catch (FileNotFoundException e)
         {
