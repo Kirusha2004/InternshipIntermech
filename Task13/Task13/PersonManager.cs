@@ -11,13 +11,17 @@ public class PersonManager : IPersonManager
 
     public Person DeserializePerson(string filePath)
     {
-        return _deserializationService.DeserializeFromFile<Person>(filePath)
-               ?? throw new InvalidOperationException("Deserialization returned null");
+        return !File.Exists(filePath)
+            ? throw new FileNotFoundException($"Файл не найден: {filePath}")
+            : _deserializationService.DeserializeFromFile<Person>(filePath)
+               ?? throw new InvalidOperationException("Десериализация вернула null");
     }
 
     public PersonAsAttributes DeserializePersonAsAttributes(string filePath)
     {
-        return _deserializationService.DeserializeFromFile<PersonAsAttributes>(filePath)
-               ?? throw new InvalidOperationException("Deserialization returned null");
+        return !File.Exists(filePath)
+            ? throw new FileNotFoundException($"Файл не найден: {filePath}")
+            : _deserializationService.DeserializeFromFile<PersonAsAttributes>(filePath)
+               ?? throw new InvalidOperationException("Десериализация вернула null");
     }
 }

@@ -28,7 +28,7 @@ public class PersonDeserializationTests
     public void DeserializePersonShouldReturnCorrectObject()
     {
         string xmlContent = @"<?xml version='1.0' encoding='utf-8'?>
-<Person>
+<Person xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
     <Name>Anna</Name>
     <Age>30</Age>
 </Person>";
@@ -45,7 +45,7 @@ public class PersonDeserializationTests
     public void DeserializePersonAsAttributesShouldReturnCorrectObject()
     {
         string xmlContent = @"<?xml version='1.0' encoding='utf-8'?>
-<Person Name='Kirill' Age='20' />";
+<Person Name='Kirill' Age='20' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' />";
         File.WriteAllText(_testFilePath, xmlContent);
 
         PersonAsAttributes deserializedPerson = _personManager.DeserializePersonAsAttributes(_testFilePath);
@@ -59,7 +59,7 @@ public class PersonDeserializationTests
     public void DeserializeFromFileShouldReturnCorrectObject()
     {
         string xmlContent = @"<?xml version='1.0' encoding='utf-8'?>
-<Person>
+<Person xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
     <Name>John</Name>
     <Age>25</Age>
 </Person>";
@@ -73,9 +73,27 @@ public class PersonDeserializationTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(InvalidOperationException))]
+    [ExpectedException(typeof(FileNotFoundException))]
     public void DeserializePersonShouldThrowWhenFileNotFound()
     {
         _ = _personManager.DeserializePerson("nonexistent.xml");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(FileNotFoundException))]
+    public void DeserializePersonAsAttributesShouldThrowWhenFileNotFound()
+    {
+        _ = _personManager.DeserializePersonAsAttributes("nonexistent.xml");
+    }
+
+    [TestMethod]
+    public void DeserializeFromFileShouldReturnNullForInvalidXml()
+    {
+        string invalidXmlContent = "Invalid XML content";
+        File.WriteAllText(_testFilePath, invalidXmlContent);
+
+        Person? result = _deserializationService.DeserializeFromFile<Person>(_testFilePath);
+
+        Assert.IsNull(result);
     }
 }

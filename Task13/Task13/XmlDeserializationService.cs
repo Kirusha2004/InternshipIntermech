@@ -15,9 +15,20 @@ public class XmlDeserializationService : IXmlDeserializationService
             XmlResolver = null
         };
 
-        using FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        using XmlReader reader = XmlReader.Create(fileStream, settings);
+        try
+        {
+            using FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            using XmlReader reader = XmlReader.Create(fileStream, settings);
 
-        return (T?)serializer.Deserialize(reader);
+            return (T?)serializer.Deserialize(reader);
+        }
+        catch (InvalidOperationException) when (File.Exists(filePath))
+        {
+            return default;
+        }
+        catch (XmlException) when (File.Exists(filePath))
+        {
+            return default;
+        }
     }
 }
