@@ -20,7 +20,7 @@ public class TemperatureReflectionService
     {
         try
         {
-            object converterInstance = Activator.CreateInstance(_converterType, new object[] { celsius })
+            object converterInstance = Activator.CreateInstance(_converterType, [celsius])
                 ?? throw new InvalidOperationException("Не удалось создать экземпляр TemperatureConverter");
 
             object? result = _conversionMethod.Invoke(converterInstance, null);
