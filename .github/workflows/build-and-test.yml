@@ -16,7 +16,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        task: [Task1, Task2, Task3, Task9]
+        task: [Task1, Task2, Task3, Task14]
       fail-fast: false
     defaults:
       run:
