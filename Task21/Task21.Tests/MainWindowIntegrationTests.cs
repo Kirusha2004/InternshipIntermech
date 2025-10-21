@@ -4,7 +4,7 @@ namespace Task21.Tests;
 public class MainWindowIntegrationTests
 {
     [TestMethod]
-    public async Task DatabaseServiceWithTimerService_ShouldWorkIndependently()
+    public async Task DatabaseServiceWithTimerServiceShouldWorkIndependently()
     {
         DatabaseService databaseService = new DatabaseService();
         TimerService timerService = new TimerService(TimeSpan.FromSeconds(1));
@@ -32,7 +32,7 @@ public class MainWindowIntegrationTests
     }
 
     [TestMethod]
-    public async Task UIStateManagement_ShouldHandleConnectionStatesCorrectly()
+    public async Task UIStateManagementShouldHandleConnectionStatesCorrectly()
     {
         DatabaseService databaseService = new DatabaseService();
         IList<ConnectionState> states = [];
