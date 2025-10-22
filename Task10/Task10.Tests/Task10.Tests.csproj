@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.4" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.0.4" />
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReflectionTaskExtentionProject\ReflectionTaskExtentionProject.csproj" />
+    <!-- Уберите прямую ссылку на Task10 -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Явно копируем Task10.dll в выходную директорию -->
+    <Content Include="..\Task10\bin\$(Configuration)\net8.0\Task10.dll">
+      <Link>Task10.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- Обеспечиваем, что Task10 собирается перед тестами -->
+  <Target Name="CopyTask10Dll" BeforeTargets="Build">
+    <ItemGroup>
+      <Task10DllFiles Include="..\Task10\bin\$(Configuration)\net8.0\Task10.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Task10DllFiles)"
+          DestinationFolder="$(OutputPath)"
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>
