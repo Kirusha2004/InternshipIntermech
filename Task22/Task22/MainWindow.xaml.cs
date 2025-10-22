@@ -65,13 +65,13 @@ public partial class MainWindow : Window
         await RefreshLogContentAsync();
     }
 
-    private async Task RefreshServiceStatusAsync()
+    private Task RefreshServiceStatusAsync()
     {
         try
         {
             if (_serviceManager == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             ServiceStatus status = _serviceManager.GetServiceStatus();
@@ -82,6 +82,8 @@ public partial class MainWindow : Window
         {
             ShowError($"Failed to refresh service status: {ex.Message}");
         }
+
+        return Task.CompletedTask;
     }
 
     private async Task RefreshLogContentAsync()
