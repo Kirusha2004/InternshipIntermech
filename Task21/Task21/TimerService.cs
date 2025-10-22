@@ -6,7 +6,7 @@ public class TimerService
 {
     private readonly DispatcherTimer _timer;
 
-    public event EventHandler<string> DataReceived;
+    public event EventHandler<string>? DataReceived;
 
     public TimerService(TimeSpan interval)
     {
@@ -29,7 +29,7 @@ public class TimerService
 
     public bool IsRunning => _timer.IsEnabled;
 
-    private void OnTimerTick(object sender, EventArgs e)
+    private void OnTimerTick(object? sender, EventArgs e)
     {
         string data = "Данные получены" + Environment.NewLine;
         DataReceived?.Invoke(this, data);

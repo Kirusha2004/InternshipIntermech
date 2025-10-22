@@ -2,8 +2,8 @@ namespace Task21;
 
 public class DatabaseService
 {
-    public event EventHandler<ConnectionState> ConnectionStateChanged;
-    public event EventHandler<string> MessageReceived;
+    public event EventHandler<ConnectionState>? ConnectionStateChanged;
+    public event EventHandler<string>? MessageReceived;
 
     private ConnectionState _currentState = ConnectionState.Disconnected;
 

@@ -24,7 +24,7 @@ public partial class MainWindow : Window
         _databaseService.ConnectionStateChanged += OnConnectionStateChanged;
     }
 
-    private void OnDataReceived(object sender, string data)
+    private void OnDataReceived(object? sender, string data)
     {
         Dispatcher.Invoke(() =>
         {
@@ -33,7 +33,7 @@ public partial class MainWindow : Window
         });
     }
 
-    private void OnConnectionStateChanged(object sender, ConnectionState state)
+    private void OnConnectionStateChanged(object? sender, ConnectionState state)
     {
         Dispatcher.Invoke(() => UpdateUIState(state));
     }
