@@ -2,6 +2,6 @@ namespace SharedInterfaces;
 
 public interface IFileLogger
 {
-    Task LogAsync(string message);
-    Task<string> ReadAllTextAsync();
+    public Task LogAsync(string message);
+    public Task<string> ReadAllTextAsync();
 }

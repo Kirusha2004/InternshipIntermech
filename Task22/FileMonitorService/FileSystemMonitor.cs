@@ -57,15 +57,14 @@ public class FileSystemMonitor : IFileSystemMonitor
             return;
         }
 
-        foreach (FileSystemWatcher watcher in _watchers)
+        foreach (FileSystemWatcher? watcher in from FileSystemWatcher watcher in _watchers
+                                               where watcher != null
+                                               select watcher)
         {
-            if (watcher != null)
-            {
-                watcher.Deleted -= OnFileDeleted;
-                watcher.Error -= OnWatcherError;
-                watcher.EnableRaisingEvents = false;
-                watcher.Dispose();
-            }
+            watcher.Deleted -= OnFileDeleted;
+            watcher.Error -= OnWatcherError;
+            watcher.EnableRaisingEvents = false;
+            watcher.Dispose();
         }
 
         _watchers = null;
