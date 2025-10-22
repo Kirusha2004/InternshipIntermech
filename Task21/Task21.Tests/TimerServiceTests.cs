@@ -27,7 +27,7 @@ public class TimerServiceTests
     [TestMethod]
     public void TimerInitialStateShouldBeStopped()
     {
-        TimerService timerService = new TimerService(TimeSpan.FromSeconds(1));
+        TimerService timerService = new TimerService(TimeSpan.FromSeconds(1));ф
 
         Assert.IsFalse(timerService.IsRunning);
     }
