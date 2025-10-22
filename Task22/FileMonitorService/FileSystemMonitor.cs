@@ -19,9 +19,8 @@ public class FileSystemMonitor : IFileSystemMonitor
     {
         try
         {
-            DriveInfo[] drives = DriveInfo.GetDrives()
-                .Where(drive => drive.DriveType == DriveType.Fixed && drive.IsReady)
-                .ToArray();
+            DriveInfo[] drives = [.. DriveInfo.GetDrives()
+                .Where(drive => drive.DriveType == DriveType.Fixed && drive.IsReady)];
 
             _watchers = new FileSystemWatcher[drives.Length];
 
