@@ -1,0 +1,61 @@
+<Window x:Class="Task22.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Менеджер службы мониторинга файлов" Height="600" Width="800"
+        Closing="Window_Closing">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Секция статуса -->
+        <GroupBox Grid.Row="0" Grid.ColumnSpan="3" Header="Статус службы" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Текущий статус:" FontWeight="Bold" Margin="5"/>
+                <TextBlock x:Name="StatusText" Text="Неизвестно" Margin="5,0" Foreground="Gray"/>
+                <Button x:Name="RefreshStatusBtn" Content="Обновить" Click="RefreshStatusBtn_Click" 
+                        Margin="20,0,0,0" Padding="10,2"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Управление службой" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="InstallBtn" Content="Установить" Click="InstallBtn_Click" 
+                        Margin="5" Padding="15,5" ToolTip="Установить службу"/>
+                <Button x:Name="UninstallBtn" Content="Удалить" Click="UninstallBtn_Click" 
+                        Margin="5" Padding="15,5" ToolTip="Удалить службу"/>
+                <Button x:Name="StartBtn" Content="Запустить" Click="StartBtn_Click" 
+                        Margin="5" Padding="15,5" ToolTip="Запустить службу"/>
+                <Button x:Name="StopBtn" Content="Остановить" Click="StopBtn_Click" 
+                        Margin="5" Padding="15,5" ToolTip="Остановить службу"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="2" Header="Настройки" Margin="0,0,0,10">
+            <StackPanel>
+                <CheckBox x:Name="AutoRefreshCheckBox" Content="Автообновление лога (каждые 2 секунды)" 
+                         IsChecked="True" Checked="AutoRefreshCheckBox_Checked" Unchecked="AutoRefreshCheckBox_Checked"
+                         Margin="5"/>
+                <Button x:Name="ClearLogBtn" Content="Очистить лог" Click="ClearLogBtn_Click" 
+                        Margin="5" Padding="10,2" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Grid.ColumnSpan="3" Header="Лог удаленных файлов" Margin="0,0,0,10">
+            <TextBox x:Name="LogTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" 
+                    HorizontalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="10"/>
+        </GroupBox>
+
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="3" x:Name="LastUpdateText" 
+                  Text="Последнее обновление: Никогда" HorizontalAlignment="Right" Foreground="Gray"/>
+    </Grid>
+</Window>
