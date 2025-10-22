@@ -7,55 +7,60 @@ namespace Task22;
 
 public partial class MainWindow : Window
 {
-    private readonly IServiceManager _serviceManager;
-    private readonly IFileLoggerWpf _fileLogger;
-    private readonly DispatcherTimer _refreshTimer;
-    private readonly string _logFilePath;
-    private readonly string _serviceExecutablePath;
+    private readonly IServiceManager? _serviceManager;
+    private readonly IFileLoggerWpf? _fileLogger;
+    private readonly DispatcherTimer? _refreshTimer;
+    private readonly string? _logFilePath;
+    private readonly string? _serviceExecutablePath;
 
     public MainWindow()
     {
         InitializeComponent();
 
-        if (AutoRefreshCheckBox == null || LogTextBox == null || StatusText == null)
+        try
         {
-            _ = MessageBox.Show("Ошибка инициализации компонентов UI");
-            return;
+            string currentDirectory = AppContext.BaseDirectory;
+            string serviceDir = Path.Combine(currentDirectory, "FileMonitor");
+            _ = Directory.CreateDirectory(serviceDir);
+
+            _logFilePath = Path.Combine(serviceDir, "deleted_files.log");
+            _serviceExecutablePath = Path.Combine(serviceDir, "FileMonitorService.exe");
+
+            _serviceManager = new ServiceManager(_serviceExecutablePath);
+            _fileLogger = new FileLoggerWpf(_logFilePath);
+
+            _refreshTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(2)
+            };
+            _refreshTimer.Tick += RefreshTimer_Tick;
+
+            Loaded += MainWindow_Loaded;
         }
-
-
-        string currentDirectory = AppContext.BaseDirectory;
-        string serviceDir = Path.Combine(currentDirectory, "FileMonitor");
-        _ = Directory.CreateDirectory(serviceDir);
-
-        _logFilePath = Path.Combine(serviceDir, "deleted_files.log");
-        _serviceExecutablePath = Path.Combine(serviceDir, "FileMonitorService.exe");
-
-        _serviceManager = new ServiceManager(_serviceExecutablePath);
-        _fileLogger = new FileLoggerWpf(_logFilePath);
-
-        _refreshTimer = new DispatcherTimer
+        catch (Exception ex)
         {
-            Interval = TimeSpan.FromSeconds(2)
-        };
-        _refreshTimer.Tick += RefreshTimer_Tick;
-
-        Loaded += MainWindow_Loaded;
+            _ = MessageBox.Show($"Ошибка инициализации: {ex.Message}", "Ошибка",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
-
 
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        if (_serviceManager == null || _fileLogger == null)
+        {
+            return;
+        }
+
         await RefreshServiceStatusAsync();
         await RefreshLogContentAsync();
 
         if (AutoRefreshCheckBox?.IsChecked == true)
         {
-            _refreshTimer.Start();
+            _refreshTimer?.Start();
         }
     }
 
-    private async void RefreshTimer_Tick(object sender, EventArgs e)
+    private async void RefreshTimer_Tick(object? sender, EventArgs e)
     {
         await RefreshLogContentAsync();
     }
@@ -64,6 +69,11 @@ public partial class MainWindow : Window
     {
         try
         {
+            if (_serviceManager == null)
+            {
+                return;
+            }
+
             ServiceStatus status = _serviceManager.GetServiceStatus();
             UpdateStatusDisplay(status);
             UpdateButtonStates(status);
@@ -78,6 +88,11 @@ public partial class MainWindow : Window
     {
         try
         {
+            if (_fileLogger == null)
+            {
+                return;
+            }
+
             string content = await _fileLogger.ReadAllTextAsync();
             if (LogTextBox != null)
             {
@@ -143,6 +158,11 @@ public partial class MainWindow : Window
     {
         try
         {
+            if (_serviceManager == null)
+            {
+                return;
+            }
+
             if (InstallBtn != null)
             {
                 InstallBtn.IsEnabled = false;
@@ -163,6 +183,11 @@ public partial class MainWindow : Window
     {
         try
         {
+            if (_serviceManager == null)
+            {
+                return;
+            }
+
             if (UninstallBtn != null)
             {
                 UninstallBtn.IsEnabled = false;
@@ -183,6 +208,11 @@ public partial class MainWindow : Window
     {
         try
         {
+            if (_serviceManager == null)
+            {
+                return;
+            }
+
             if (StartBtn != null)
             {
                 StartBtn.IsEnabled = false;
@@ -203,6 +233,11 @@ public partial class MainWindow : Window
     {
         try
         {
+            if (_serviceManager == null)
+            {
+                return;
+            }
+
             if (StopBtn != null)
             {
                 StopBtn.IsEnabled = false;
@@ -229,7 +264,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            if (File.Exists(_logFilePath))
+            if (_logFilePath != null && File.Exists(_logFilePath))
             {
                 File.Delete(_logFilePath);
                 await RefreshLogContentAsync();
